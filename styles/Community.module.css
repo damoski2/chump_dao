@@ -1,0 +1,121 @@
+/* @import "compass/css3"; */
+
+.container {
+  padding: 60px 35px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  font-family: "Inter";
+  position: relative;
+}
+
+.container h1 {
+  align-self: center;
+  text-align: center;
+  width: 80%;
+  z-index: 10;
+}
+
+.body {
+  align-self: flex-start;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  z-index: 10;
+}
+
+.body .community__illustration {
+  align-self: flex-start;
+}
+
+.right__div {
+  align-self: flex-end;
+}
+
+.right__div h2 {
+  color: #1a171b;
+  font-size: 32px;
+  line-height: 40px;
+  width: 35%;
+  font-weight: 600;
+  margin: 0;
+  position: relative;
+  left: 94.8906px;
+}
+
+.right__div .info__div {
+  display: flex;
+  flex-direction: row;
+  padding: 45.51px 0;
+  width: 70%;
+  margin: auto;
+  border-bottom: 0.3px solid rgba(116, 113, 113, 0.2);
+}
+
+.right__div .info__div:last-child {
+  border-bottom: none;
+}
+
+.info__div p {
+  font-size: 20px;
+  line-height: 25px;
+  color: #1a171b;
+  width: 100%;
+  margin: 0;
+  margin-left: 18px;
+}
+
+.circle__div {
+    position: relative;
+}
+
+.circle1 {
+  position: relative;
+  left: 55em;
+  top: -40px;
+}
+
+.circle__div .circle:nth-child(2) {
+    position: relative;
+    left: 55%;
+    top: -40px;
+  }
+
+  .circle__div .circle:nth-child(3) {
+    position: relative;
+    left: 55%;
+    top: -40px;
+  }
+
+  .circle__div .circle:nth-child(4) {
+    position: relative;
+    left: 55%;
+    top: -40px;
+  }
+
+.circle {
+  width: 30px;
+  height: 30px;
+  position: relative;
+}
+
+@-webkit-keyframes float {
+  0% {
+    -webkit-transform: rotate(0deg) translate3d(3px, 0, 0) rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg) translate3d(3px, 0, 0) rotate(-360deg);
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: rotate(0deg) translate3d(3px, 0, 0) rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg) translate3d(3px, 0, 0) rotate(-360deg);
+  }
+}

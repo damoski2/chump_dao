@@ -2,7 +2,7 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
-import { Carousel } from '../components/imports'
+import { Carousel, Community } from '../components/imports'
 
 const Home: NextPage = () => {
   return (
@@ -13,6 +13,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Carousel />
+      <Community />
     </div>
   )
 }
