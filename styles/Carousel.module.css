@@ -1,0 +1,27 @@
+.container{
+    background-image: url(https://res.cloudinary.com/oyindacodes/image/upload/v1656374949/HomePage_mpllp2.svg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    margin-top: 6em;
+    width: 100%;
+    padding: 30px 90px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container h1{
+    font-size: 64px;
+    font-weight: bold;
+    font-family: 'Inter';
+    width: 60%;
+    text-align: center;
+    margin-bottom: 18px;
+    color: #1A171B;
+}
+
+.container p{
+    color: #747171;
+}
