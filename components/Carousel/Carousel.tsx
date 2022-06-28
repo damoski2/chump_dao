@@ -1,6 +1,6 @@
 import React from "react";
 import style from "../../styles/Carousel.module.css";
-import PrimaryButton from "../REUSABLES/PrimaryButton";
+import PrimaryLink from "../REUSABLES/PrimaryLink";
 import RealTime from "./RealTime";
 import { mouseIcon } from "../../Images";
 
@@ -11,7 +11,7 @@ const Carousel: React.FC = () => {
       <p>A Fair DAO for voting on equality on garnerly’s internal decisions.</p>
       <RealTime />
       <div className={style.button}>
-        <PrimaryButton info="Create Proposal" />
+        <PrimaryLink info="Create Proposal" />
       </div>
       <img src={mouseIcon} alt="" />
       <h3>Explore ChumpDAO</h3>

@@ -17,5 +17,6 @@ module.exports = {
     ethereumIcon: "https://res.cloudinary.com/oyindacodes/image/upload/v1656420307/logos_ethereum_a5fsmv.svg",
     usdcIcon: "https://res.cloudinary.com/oyindacodes/image/upload/v1656420307/cryptocurrency_usdc_zlpoqs.svg",
     blockchainIcom: "https://res.cloudinary.com/oyindacodes/image/upload/v1656420307/Group_1_qjhuel.svg",
-    bitcoinIcon: "https://res.cloudinary.com/oyindacodes/image/upload/v1656420307/logos_bitcoin_hbcqpk.svg"
+    bitcoinIcon: "https://res.cloudinary.com/oyindacodes/image/upload/v1656420307/logos_bitcoin_hbcqpk.svg",
+    proposalIllustration: "https://res.cloudinary.com/oyindacodes/image/upload/v1656455517/undraw_investor_update_re_qnuu_1_nqycya.svg"
 }
