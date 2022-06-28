@@ -13,5 +13,9 @@ module.exports = {
     lightPurpleCircle: "https://res.cloudinary.com/oyindacodes/image/upload/v1656413777/Ellipse_6_tdcofv.svg",
     pinkCircle: "https://res.cloudinary.com/oyindacodes/image/upload/v1656413777/Ellipse_3_vfretd.svg",
     navyBlueCircle: "https://res.cloudinary.com/oyindacodes/image/upload/v1656413777/Ellipse_7_zwpf5l.svg",
-    checkIcon: "https://res.cloudinary.com/oyindacodes/image/upload/v1656414005/Group_t43n88.svg"
+    checkIcon: "https://res.cloudinary.com/oyindacodes/image/upload/v1656414005/Group_t43n88.svg",
+    ethereumIcon: "https://res.cloudinary.com/oyindacodes/image/upload/v1656420307/logos_ethereum_a5fsmv.svg",
+    usdcIcon: "https://res.cloudinary.com/oyindacodes/image/upload/v1656420307/cryptocurrency_usdc_zlpoqs.svg",
+    blockchainIcom: "https://res.cloudinary.com/oyindacodes/image/upload/v1656420307/Group_1_qjhuel.svg",
+    bitcoinIcon: "https://res.cloudinary.com/oyindacodes/image/upload/v1656420307/logos_bitcoin_hbcqpk.svg"
 }

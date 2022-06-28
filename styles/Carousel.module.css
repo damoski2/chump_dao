@@ -3,7 +3,7 @@
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-    height: 100vh;
+
     margin-top: 6em;
     width: 100%;
     padding: 30px 90px;
@@ -11,6 +11,10 @@
     flex-direction: column;
     align-items: center;
     font-family: 'Inter';
+}
+
+.container *{
+    overflow-y: hidden;
 }
 
 .container h1{
