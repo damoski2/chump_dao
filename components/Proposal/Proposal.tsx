@@ -32,28 +32,44 @@ const Proposal: React.FC<Prop> = ({ slug }): JSX.Element => {
         </div>
         <div className={style.rule} />
         <div className={style.vote__details}>
-          <div className={style.vote__for}>
+          <div className={style.vote__for__against}>
             <div className={style.text}>
               <p>Votes For</p>
               <h2>10</h2>
             </div>
             <div className={style.progress__bar}>
               <p>35%</p>
-              <ProgressBar completed={60} isLabelVisible={false} />
+              <ProgressBar
+                bgColor="#6C63FF"
+                dir='rtl'
+                className={style.progess__bar__ui}
+                completed={60}
+                isLabelVisible={false}
+                transitionTimingFunction="ease-in"
+                animateOnRender={true}
+              />
             </div>
           </div>
-          <div className={style.vote__against}>
+          <div className={style.vote__for__against}>
             <div className={style.text}>
-              <p>Votes For</p>
-              <h2>10</h2>
+              <p>Votes Against</p>
+              <h2>7</h2>
             </div>
             <div className={style.progress__bar}>
-              <p>35%</p>
-              <ProgressBar completed={60} isLabelVisible={false} />
+              <p>28%</p>
+              <ProgressBar
+                bgColor="#6C63FF"
+                dir='rtl'
+                className={style.progess__bar__ui}
+                completed={50}
+                isLabelVisible={false}
+                transitionTimingFunction="ease-in"
+                animateOnRender={true}
+              />
             </div>
           </div>
         </div>
-        <h2>
+        <h2 className={style.proposer} >
           Proposer: <span>{proposal?.proposer ?? "0x00000000"}</span>
         </h2>
       </div>
@@ -62,7 +78,7 @@ const Proposal: React.FC<Prop> = ({ slug }): JSX.Element => {
 
   return (
     <div className={style.container}>
-      <h2>{proposal?.description ?? "Default description"}</h2>
+      <h2 className={style.proposal__description__heading} >{proposal?.description ?? "Default description"}</h2>
       <div className={style.proposal__section}>
         {validProposal()}
         <form className={style.cast__vote}>
@@ -70,11 +86,11 @@ const Proposal: React.FC<Prop> = ({ slug }): JSX.Element => {
           <div className={style.input__div}>
             <div>
               <input type="radio" value="For" id="For" />
-              <label htmlFor="For"></label>
+              <label htmlFor="For">For</label>
             </div>
             <div>
               <input type="radio" value="For" id="For" />
-              <label htmlFor="For"></label>
+              <label htmlFor="For">Against</label>
             </div>
           </div>
           <PrimaryButton info="Submit" />

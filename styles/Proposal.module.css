@@ -1,47 +1,160 @@
-.container{
-    padding: 60px 65px;
-    margin-top: 6em;
-    width: 100%;
-    font-family: 'Inter';
+.container {
+  padding: 60px 65px;
+  margin-top: 6em;
+  width: 100%;
+  font-family: "Inter";
 }
 
-.proposal__section{
-    display: flex;
-    justify-content: space-between;
-}
-
-.vote__info{
-    width: 60%;
-    border: .3px solid rgba(0, 0, 0, 0.2);
-    border-radius: 7px;
-    padding: 20px;
-}
-
-.vote__header{
-    display: flex;
-    justify-content: space-between;
-    margin: 10px 0 25px 0
-}
-
-.rule{
-    width: 100%;
-    border: .3px solid rgba(116, 113, 113, 0.3);
-}
-
-.vote__header h3{
-    font-size: 20px;
-    color: #1A171B;
+.proposal__description__heading{
     margin: 0;
+    margin-bottom: 72px;
 }
 
-.vote__header img{
-    height: fit-content;
+.proposal__section {
+  display: flex;
+  justify-content: space-between;
+}
+
+.vote__info {
+  width: 60%;
+  border: 0.3px solid rgba(0, 0, 0, 0.2);
+  border-radius: 7px;
+  padding: 20px;
+}
+
+.vote__header {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0 25px 0;
+}
+
+.rule {
+  width: 100%;
+  border: 0.3px solid rgba(116, 113, 113, 0.3);
+  margin-bottom: 25px;
+}
+
+.vote__for__against {
+  display: flex;
+  justify-content: space-between;
+  background: rgba(222, 210, 250, 0.4);
+  border-radius: 7px;
+  margin-top: 36px;
+  padding: 20px;
+}
+
+.vote__for__against h2 {
+  margin: 0;
+}
+
+.text p {
+  margin-bottom: 5px;
+}
+
+.progress__bar {
+  flex: 0.6;
+}
+
+.progess__bar__ui {
+  margin-top: 20;
+}
+
+.progress__bar p {
+  text-align: right;
+}
+
+.vote__header h3 {
+  font-size: 20px;
+  color: #1a171b;
+  margin: 0;
+}
+
+.vote__header img {
+  height: fit-content;
+}
+
+.proposer {
+  margin: 0;
+  margin-top: 36px;
+  color: #747171;
+}
+
+.proposer span {
+  font-size: 20px;
+  color: #6c63ff;
+  text-decoration: underline;
+  position: relative;
+  top: -3px;
+}
+
+.cast__vote {
+  width: 35%;
+  border: 0.3px solid rgba(0, 0, 0, 0.2);
+  border-radius: 7px;
+  padding: 40px;
+  height: fit-content;
+}
+
+.cast__vote h2 {
+  margin: 0;
+  margin-bottom: 52px;
+}
+
+.input__div {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 52px;
+}
+
+.input__div input[type="radio"] {
+    margin: 0;
+  width: 30px;
+  height: 30px;
+  background: #f9f9fb;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.input__div div{
+    display: flex;
+    margin-bottom: 19px;
+}
+
+.input__div div label{
+    align-self: center;
+    margin-left: 24px;
+    color: #1A171B;
+    font-size: 20px;
+    line-height: 25px;
+    font-weight: 400;
+}
+
+@media(max-width:768px){
+    .proposal__section{
+        flex-direction: column;
+    }
+
+    .vote__info{
+        width: 100%;
+    }
+
+    .cast__vote{
+        width: 100%;
+        margin-top: 72px;
+    }
 }
 
 
-.cast__vote{
-    width: 35%;
-    border: .3px solid rgba(0, 0, 0, 0.2);
-    border-radius: 7px;
-    padding: 20px;
+@media(max-width:576px){
+    .proposal__description__heading{
+        line-height: unset;
+        margin-bottom: 35px ;
+    }
+
+    .progress__bar{
+        flex: .75;
+    }
+
+    .container{
+        padding: 60px 35px;
+    }
 }
