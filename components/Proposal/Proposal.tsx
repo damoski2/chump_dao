@@ -28,7 +28,7 @@ const Proposal: React.FC<Prop> = ({ slug }): JSX.Element => {
       <div className={style.vote__info}>
         <div className={style.vote__header}>
           <img src={trioCircle} alt="trioCircle" />
-          <h2>vote</h2>
+          <h3>vote</h3>
         </div>
         <div className={style.rule} />
         <div className={style.vote__details}>
