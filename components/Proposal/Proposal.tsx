@@ -18,11 +18,20 @@ const Proposal: React.FC<Prop> = ({ slug }): JSX.Element => {
         )
     }
 
-    return (
+    const validProposal = (): JSX.Element =>{
+        return(
+            <div>
+
+            </div>
+        )
+    }
+
+    return(
         <div>
-            
+            {inValidProposal()}
         </div>
     )
 }
+  
 
 export default Proposal
