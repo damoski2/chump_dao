@@ -3,7 +3,7 @@ import style from "../../styles/Proposal.module.css";
 import { noDataIllustration } from "../../Images";
 import { staticProposal, Proposal } from "../../static/staticProposal";
 import PrimaryButton from "../REUSABLES/PrimaryButton";
-import { trioCircle } from '../../Images';
+import { trioCircle } from "../../Images";
 
 type Prop = {
   slug: string;
@@ -23,18 +23,26 @@ const Proposal: React.FC<Prop> = ({ slug }): JSX.Element => {
   };
 
   const validProposal = (): JSX.Element => {
-    return <div className={style.vote__info} >
-        <div className={style.vote__header} >
-            <img src={trioCircle} alt="trioCircle" />
-            <h3></h3>
+    return (
+      <div className={style.vote__info}>
+        <div className={style.vote__header}>
+          <img src={trioCircle} alt="trioCircle" />
+          <h3>vote</h3>
         </div>
-    </div>;
+        <div className={style.rule} />
+        <div className={style.vote__details}>
+          <div className={style.vote__for}></div>
+          <div className={style.vote__against}></div>
+        </div>
+        <h2>Proposer: <span>{proposal?.proposer ?? '0x00000000'}</span></h2>
+      </div>
+    );
   };
 
   return (
     <div className={style.container}>
       <h2>{proposal?.description ?? "Default description"}</h2>
-      <div className={style.proposal__section} >
+      <div className={style.proposal__section}>
         {validProposal()}
         <form className={style.cast__vote}>
           <h2>Cast Vote</h2>
