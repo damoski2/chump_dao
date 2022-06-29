@@ -24,8 +24,9 @@ const Proposal: React.FC<Prop> = ({ slug }): JSX.Element => {
 
   const validProposal = (): JSX.Element => {
     return <div className={style.vote__info} >
-        <div>
-
+        <div className={style.vote__header} >
+            <img src={trioCircle} alt="trioCircle" />
+            <h3></h3>
         </div>
     </div>;
   };
