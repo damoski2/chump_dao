@@ -1,0 +1,76 @@
+.container{
+    padding: 60px 65px;
+    margin-top: 6em;
+    width: 100%;
+    font-family: 'Inter';
+    overflow-x: scroll;
+    overflow-y: auto;
+}
+
+.container h1{
+    text-align: left;
+}
+
+.container p{
+    margin: 0;
+}
+
+.proposal__table{
+    border: .3px solid rgba(0, 0, 0, 0.2);
+    border-radius: 7px;
+    padding: 20px;
+}
+
+.rule{
+    width: 99%;
+    border: .3px solid rgba(116, 113, 113, 0.3);
+    margin: 42.74px auto;
+}
+
+.list__header, .actual__list{
+    display: flex;
+    justify-content: space-between;
+}
+
+.actual__list{
+    margin-bottom: 63px;
+}
+
+.list__header{
+    margin-top: 42.74px;
+}
+
+.list__header p{
+    font-size: 20px;
+    line-height: 25px;
+    color: #747171;
+    font-weight: 600;
+}
+
+.actual__list p{
+    font-size: 16px;
+    line-height: 25px;
+    color:#1A171B;
+    font-weight: 400;
+}
+
+.list__header .description , .actual__list .description{
+    flex: .7;
+}
+
+.list__header .status , .actual__list .status{
+    flex: .12;
+}
+
+@media(max-width:768px){
+
+    .container{
+       
+    }
+
+    .proposal__table{
+        min-width: 640px;
+        position: relative;
+        overflow-x: scroll;
+    }
+}
