@@ -26,8 +26,14 @@ h1 {
   line-height: 80px;
 }
 
+h2{
+  color: #1a171b;
+  font-size: 32px;
+  line-height: 40px;
+}
+
 @media (max-width: 576px) {
-   h1 {
+  h1 {
     font-size: 48px;
     line-height: 60px;
     width: 100%;
@@ -37,11 +43,11 @@ h1 {
     font-size: 20px;
   }
 
-   p {
+  p {
     font-size: 16px;
   }
 
-   h3 {
+  h3 {
     font-size: 16px;
   }
 }

@@ -1,0 +1,18 @@
+.container{
+    padding: 60px 65px;
+    margin-top: 6em;
+    width: 100%;
+    font-family: 'Inter';
+}
+
+.proposal__section{
+    display: flex;
+}
+
+.vote__info{
+
+}
+
+.cast__vote{
+    
+}
