@@ -11,7 +11,7 @@ const Carousel: React.FC = () => {
       <p>A Fair DAO for voting on equality on garnerly’s internal decisions.</p>
       <RealTime />
       <div className={style.button}>
-        <PrimaryLink info="Create Proposal" />
+        <PrimaryLink info="Create Proposal" to="/proposal/create" />
       </div>
       <img src={mouseIcon} alt="" />
       <h3>Explore ChumpDAO</h3>

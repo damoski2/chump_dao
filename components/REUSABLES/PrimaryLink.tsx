@@ -4,12 +4,13 @@ import Link from 'next/link'
 
 type PrimaryLinkProps = {
     info: string
+    to: string;
 }
 
 
-const PrimaryLink: React.FC<PrimaryLinkProps> = ({ info }) => {
+const PrimaryLink: React.FC<PrimaryLinkProps> = ({ info, to }) => {
   return (
-    <Link href="/proposal/create" >
+    <Link href={to} >
         <button className={style.primary__button} > 
         {info}
     </button> 

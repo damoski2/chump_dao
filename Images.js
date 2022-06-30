@@ -20,5 +20,6 @@ module.exports = {
     bitcoinIcon: "https://res.cloudinary.com/oyindacodes/image/upload/v1656420307/logos_bitcoin_hbcqpk.svg",
     proposalIllustration: "https://res.cloudinary.com/oyindacodes/image/upload/v1656455517/undraw_investor_update_re_qnuu_1_nqycya.svg",
     noDataIllustration: "https://res.cloudinary.com/oyindacodes/image/upload/v1656510088/No_Data_Illustration_idc66c.svg",
-    trioCircle: "https://res.cloudinary.com/oyindacodes/image/upload/v1656511871/TrioCircle_tiktkb.svg"
+    trioCircle: "https://res.cloudinary.com/oyindacodes/image/upload/v1656511871/TrioCircle_tiktkb.svg",
+    rocketImage: "https://res.cloudinary.com/oyindacodes/image/upload/v1656622020/Saly-43_wsppia.svg"
 }
