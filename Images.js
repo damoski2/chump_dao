@@ -21,5 +21,9 @@ module.exports = {
     proposalIllustration: "https://res.cloudinary.com/oyindacodes/image/upload/v1656455517/undraw_investor_update_re_qnuu_1_nqycya.svg",
     noDataIllustration: "https://res.cloudinary.com/oyindacodes/image/upload/v1656510088/No_Data_Illustration_idc66c.svg",
     trioCircle: "https://res.cloudinary.com/oyindacodes/image/upload/v1656511871/TrioCircle_tiktkb.svg",
-    rocketImage: "https://res.cloudinary.com/oyindacodes/image/upload/v1656622020/Saly-43_wsppia.svg"
+    rocketImage: "https://res.cloudinary.com/oyindacodes/image/upload/v1656622020/Saly-43_wsppia.svg",
+    sendIcon: "https://res.cloudinary.com/oyindacodes/image/upload/v1656704751/bi_send_sexukv.svg",
+    arrowLeftIcon: "https://res.cloudinary.com/oyindacodes/image/upload/v1656704751/bytesize_arrow-left_pvvmqx.svg",
+    timeBalanceIcon: "https://res.cloudinary.com/oyindacodes/image/upload/v1656707201/TimeLine_Balance_1_nra9cz.svg",
+    arrowUp: "https://res.cloudinary.com/oyindacodes/image/upload/v1656706193/akar-icons_arrow-up_ppchkn.svg"
 }

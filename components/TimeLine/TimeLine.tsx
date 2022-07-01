@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React from "react";
 import style from "../../styles/TimeLine.module.css";
 import { rocketImage } from "../../Images";
@@ -11,11 +12,11 @@ const TimeLine: React.FC = (): JSX.Elememnt => {
         <div className={style.link__div}>
           <PrimaryLink
             info="Purchase TimeLine"
-            to="https://timeline-inky.vercel.app/"
+            to="/timeline/purchase"
           />
         </div>
       </div>
-      <img src={rocketImage} />
+      <img src={rocketImage} alt="rocketImage" />
     </div>
   );
 };

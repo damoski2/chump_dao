@@ -1,34 +1,32 @@
 import axios from "axios";
 
 
-type ReturnData = {
+export type ReturnData = {
     name: string;
-    market_price: string;
+    market_price: number;
 }
 
 
-const returnSpecificCryptoAsset = (cryptoAsset: Array<any>): ReturnData =>{
+
+
+const fetchCryptoAssets = async(): Promise<[ReturnData | null, any]> =>{
     let newData = {} as ReturnData;
-    cryptoAsset.forEach(asset=>{
-        if(asset.name === 'Ethereum'){
-            newData.name = asset.name;
-            newData.market_price = asset.metrics.market_data.price_usd;
-        }
-    })
-    return newData
-}
-
-
-const fetchCryptoAssets = async(): Promise<ReturnData> =>{
     try{
         let data = await axios.get('https://data.messari.io/api/v1/assets',{
             headers: {
                 "x-messari-api-key": "a812d426-8087-40c1-98be-514b9c269bd2"
             },
         });
-        return returnSpecificCryptoAsset(data?.data['data']);
+        let res = data?.data['data'] as Array<any>;
+        res.forEach(asset=>{
+            if(asset.name === 'Ethereum'){
+                newData.name = asset.name;
+                newData.market_price = asset.metrics.market_data.price_usd;
+            }
+        })
+        return [newData, null];
     }catch(error){
-        throw new Error('Error in fetching crypto assets!!');
+        return [null, error];
     }
 }
 

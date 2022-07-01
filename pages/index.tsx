@@ -9,7 +9,7 @@ import { fetchCryptoAssets } from '../api/crypto'
 const Home: NextPage = () => {
 
   useEffect(() =>{
-   console.log(fetchCryptoAssets())
+   
   },[])
 
   return (
