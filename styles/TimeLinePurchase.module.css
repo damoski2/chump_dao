@@ -36,6 +36,7 @@
   border-radius: 7px;
   width: 685px;
   height: 114px;
+  margin-top: 30px;
 }
 
 .metrics{
@@ -64,4 +65,88 @@
     font-size: 20px;
     font-weight: 400;
     margin-left: 18px;
+}
+
+.button__link{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 45px;
+}
+
+.button__link button{
+    width: 48%;
+    display: flex;
+    justify-content: center;
+    border: none;
+    background: #6C63FF;
+    box-shadow: -1.93862px 0px 22.2941px 31.9872px rgba(0, 0, 0, 0.02);
+    color: #fff;
+    border-radius: 18px;
+    padding: 28px 0;
+    cursor: pointer;
+}
+
+.button__link h1{
+    margin: 0;
+    align-self: center;
+    color: #fff;
+    margin-left: 8px;
+}
+
+.button__link img{
+    width: 101;
+    height: 101;
+    margin-right: 18px;
+}
+
+
+@media(max-width:992px){
+    .purchase__block textarea{
+        width: 90%;
+    }
+
+    .purchase__block{
+        padding: 42px 42px;
+    }
+
+    .surround{
+        flex-direction: column;
+    }
+
+    .price h1{
+        margin-top: 30px;
+    }
+}
+
+@media(max-width:768px){
+    .button__link img{
+        width: 30%;
+    }
+
+    .button__link h1{
+        font-size: 32px;
+        margin: 0;
+    }
+}
+
+
+@media(max-width:576px){
+    .button__link button{
+        padding: 28px 20px;
+    }
+
+    .button__link img{
+        align-self: center;
+    }
+}
+
+@media(max-width:411px){
+    .button__link button{
+        padding: 10px;
+    }
+
+    .button__link h1{
+        font-size: 24px;
+        margin: 0;
+    }
 }

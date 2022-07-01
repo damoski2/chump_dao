@@ -28,8 +28,8 @@ const purchase: React.FC = (): JSX.Element => {
         </button>
         <Link href="">
           <button>
-            <img src={sendIcon} alt="sendIcon" />
-            <h1>Buy</h1>
+            <img src={arrowLeftIcon} alt="sendIcon" />
+            <h1>Home</h1>
           </button>
         </Link>
       </div>

@@ -4,7 +4,7 @@ import style from "../../styles/TimeLine.module.css";
 import { rocketImage } from "../../Images";
 import PrimaryLink from "../REUSABLES/PrimaryLink";
 
-const TimeLine: React.FC = (): JSX.Elememnt => {
+const TimeLine: React.FC = (): JSX.Element => {
   return (
     <div className={style.container}>
       <div className={style.info__div}>
