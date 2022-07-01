@@ -9,7 +9,7 @@ export const BlockChainContext: React.Context<T> = createContext<null>(null);
 let ethereum;
 let solana;
 
-if (typeof window !== 'undefined') {
+if (typeof window !== 'undefined'){
 	ethereum = window.ethereum;
 	solana = window.solana;
 }

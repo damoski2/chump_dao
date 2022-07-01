@@ -1,7 +1,7 @@
 
 
 export interface Proposal{
-    id: string | number;
+    id:  number;
     description: string;
     status: string;
     proposer: string;

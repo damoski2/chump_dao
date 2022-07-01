@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
@@ -5,6 +6,17 @@ import styles from '../styles/Home.module.css'
 import { Carousel, Community, TimeLine } from '../components/imports'
 
 const Home: NextPage = () => {
+
+/*   useEffect(() =>{
+      const getData = async()=>{
+        let data = await fetch('https://data.messari.io/api/v1/assets')
+        let json = await data.json()
+        console.log(json)
+      }
+
+      getData()
+  },[])
+ */
   return (
     <div style={{ zIndex:50, overflowY: 'hidden' }} >
       <Head>
