@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import React from "react";
 import style from "../../styles/TimeLinePurchase.module.css";
-import { arrowLeftIcon, sendIcon, timeBalanceIcon, arrowUp } from "../../Images";
+import { arrowLeftIcon, sendIcon, timeBalanceIcon, arrowUp, blockchainIcom } from "../../Images";
 import Link from "next/link";
 
 const purchase: React.FC = (): JSX.Element => {

@@ -25,7 +25,7 @@ export const BlockChainProvider: React.FC<ContextProp> = ({ children }): JSX.Ele
     const [data, error] = await fetchCryptoAssets();
     console.log(data)
     setCryptoAssests(data);
-  }
+  };
 
   useEffect(() => {
     getCryptoAssests()
