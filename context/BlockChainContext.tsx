@@ -9,7 +9,7 @@ type ContextProp = {
 };
 
 type TransactionData = {
-  value: string,
+  value?: string,
   from: string,
 }
 
@@ -27,14 +27,16 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
   children,
 }): JSX.Element => {
   //Get Smart contracts
-  const daiTokenContract = getDaiTokenContract();
-  const daoContract = getDaoContract();
-  const timeLineContract = getTimeLineContract();
+  const daiTokenContract = ethereum && getDaiTokenContract();
+  const daoContract = ethereum && getDaoContract();
+  const timeLineContract = ethereum && getTimeLineContract();
 
   const [currentUser, setCurrentUser] = useState<string>();
   const [cryptoAssets, setCryptoAssests] = useState<ReturnData | null>();
   const [timeLineBalance, setTimeLineBalance] = useState<string>("0");
   const [loading, setLoading] = useState<boolean>(false);
+  const [totalProposal, setTotalProposal] = useState<number>(0);
+  const [totalVote, setTotalVote] = useState<number>(0);
 
   const getCryptoAssests = async (): Promise<void> => {
     const [data, error] = await fetchCryptoAssets();
@@ -58,6 +60,19 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
         timeLineBalance = ethers.utils.formatEther(timeLineBalance.toString());
         setTimeLineBalance(timeLineBalance);
       }
+
+      if(daoContract){
+        let proposalTotal = await daoContract.totalProposal({
+          from: accounts[0],
+        } as TransactionData);
+        setTotalProposal(proposalTotal.toNumber());
+
+        let voteTotal = await daoContract.totalVote({
+          from: accounts[0],
+        } as TransactionData);
+        setTotalVote(voteTotal.toNumber());
+      }
+
     } catch (error) {
       setLoading(false);
       console.log(error);
@@ -66,6 +81,7 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
   };
 
   const connectWallet = async (): Promise<string | void> => {
+    //console.log('pressed')
     try {
       setLoading(true);
       if (!ethereum) return toast.error("Please install MetaMask");
@@ -110,6 +126,8 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
         cryptoAssets,
         timeLineBalance,
         loading,
+        totalProposal,
+        totalVote,
         connectWallet,
         buyTimeLine
       }}

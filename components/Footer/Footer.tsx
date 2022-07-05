@@ -26,7 +26,7 @@ const Footer = () => {
           <p>Join garnerly waitlist using SDK</p>
           <div className={style.waitlist__form}>
             <input type="text" />
-            <PrimaryButton info="Submit" />
+            <PrimaryButton info="Submit" onPress={():void =>{}} />
           </div>
         </div>
       </div>

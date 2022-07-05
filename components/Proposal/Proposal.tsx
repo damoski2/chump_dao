@@ -93,7 +93,7 @@ const Proposal: React.FC<Prop> = ({ slug }): JSX.Element => {
               <label htmlFor="For">Against</label>
             </div>
           </div>
-          <PrimaryButton info="Submit" />
+          <PrimaryButton info="Submit" onPress={():void =>{}} />
         </form>
       </div>
     </div>

@@ -1,4 +1,5 @@
 export {};
+declare module 'react-identicons';
 
 declare global {
     interface Window {

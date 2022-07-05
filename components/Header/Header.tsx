@@ -5,11 +5,21 @@ import { logo, pointerDown } from "../../Images.js";
 import PrimaryButton from "../REUSABLES/PrimaryButton";
 import { BlockChainContext } from "../../context/BlockChainContext";
 import Link from "next/link";
+import Identicon from 'identicon.js'
+
 
 
 const Header: React.FC = () => {
 
-  const { connectWallet } = useContext(BlockChainContext);
+  const { connectWallet, currentUser } = useContext(BlockChainContext);
+
+  const formatUser: ()=>string = (): string=>{
+    if(currentUser){
+      return currentUser.substring(0,6)+"..."+currentUser.substring(currentUser.length-4,currentUser.length);
+    }
+    return "";
+  }
+
 
   return (
     <section className={style.overall}>
@@ -35,9 +45,19 @@ const Header: React.FC = () => {
             <li>Contributors</li>
           </Link>
         </ul>
-        <div className={style.button}>
-          <PrimaryButton info="Connect Wallet" />
+        {currentUser?(
+          <div className={style.eth__address} >
+            <img src={`data:image/png;base64,${new Identicon(
+                  currentUser,
+                  30
+                ).toString()}`} alt="currentUser" />
+            <p>{formatUser()}</p>
+          </div>
+        ):(
+          <div className={style.button}>
+          <PrimaryButton onPress={connectWallet} info="Connect Wallet" />
         </div>
+        )}
         <div className={style.humbuger}>
           <div />
           <div />

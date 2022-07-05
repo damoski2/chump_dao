@@ -80,6 +80,27 @@
   justify-content: flex-end;
 }
 
+.eth__address{
+  background: #8016EB;
+  color: #fff;
+  padding: 0px 15px 0px 0;
+  height: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 99px;
+}
+
+.eth__address img{
+  border-radius: 999px;
+  height: 45px;
+}
+
+.eth__address p{
+  margin: 0;
+  margin-left: 7px;
+}
+
 @media (max-width: 1200px) {
   .links {
     width: 60%;
@@ -126,5 +147,9 @@
 
   .humbuger {
     display: flex;
+  }
+
+  .eth__address{
+    display: none;
   }
 }
