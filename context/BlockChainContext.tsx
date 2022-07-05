@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react'
 import { ReturnData, fetchCryptoAssets } from '../api/crypto'
+import toast, { Toaster } from 'react-hot-toast';
 
 
 type ContextProp = {
@@ -21,7 +22,7 @@ export const BlockChainProvider: React.FC<ContextProp> = ({ children }): JSX.Ele
 
 
   //Get Smart contracts
-  
+
 
   const [currentUser, setCurrentUser] = useState<string>();
   const [cryptoAssets, setCryptoAssests] = useState<ReturnData | null>()
@@ -42,7 +43,9 @@ export const BlockChainProvider: React.FC<ContextProp> = ({ children }): JSX.Ele
       const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
       accounts.length && setCurrentUser(accounts[0]);
     }catch(error){
-
+      setLoading(false);
+      console.log(error)
+      toast.error('Connection Error!');
     }
   }
 
@@ -68,8 +71,48 @@ export const BlockChainProvider: React.FC<ContextProp> = ({ children }): JSX.Ele
 
   return (
    <BlockChainContext.Provider value={{
-
+    currentUser,
+    cryptoAssets,
+    timeLineBalance,
+    loading,
+    connectWallet
    }}>
+    		<Toaster 
+				position='top-center'
+				gutter={8}
+
+				toastOptions={{
+					className: '',
+					duration: 5000,
+					style: {
+					  background: '#363636',
+					  color: '#fff',
+					},
+					success: {
+						style: {
+						  background: '#102f10',
+						  width: '700px',
+						  animation: 'custom-enter 1s ease'
+						},
+						theme: {
+							primary: '#00cc10',
+							secondary: '#00aa60',
+						}
+					},
+
+					error: {
+						style: {
+							background: '#f10021',
+							width: '700px',
+							animation: 'custom-enter 1s ease'
+						},
+						theme: {
+							primary: '#f10021',
+							secondary: '#d10011',
+						}
+					}
+				}}
+			/>
     {children}
    </BlockChainContext.Provider>
   )
