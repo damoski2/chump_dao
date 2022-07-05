@@ -1,11 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
-import React from "react";
+import React, { useContext } from "react";
 import style from "../../styles/Header.module.css";
 import { logo, pointerDown } from "../../Images.js";
 import PrimaryButton from "../REUSABLES/PrimaryButton";
+import { BlockChainContext } from "../../context/BlockChainContext";
 import Link from "next/link";
 
+
 const Header: React.FC = () => {
+
+  const { connectWallet } = useContext(BlockChainContext);
+
   return (
     <section className={style.overall}>
       <nav className={style.container}>

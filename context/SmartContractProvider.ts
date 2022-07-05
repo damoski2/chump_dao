@@ -2,7 +2,7 @@ export {}
 
 import Web3 from 'web3';
 import { ethers } from 'ethers';
-import { DaiTokenAddress, daiTokenABI, DaoAddress, daoABI } from '../utils/constants';
+import { DaiTokenAddress, daiTokenABI, DaoAddress, daoABI, TimeLineAddress, timeLineABI } from '../utils/constants';
 
 let ethereum: any;
 
@@ -27,4 +27,13 @@ export const getDaoContract = ():ethers.Contract=>{
     const daoContract = new ethers.Contract(DaoAddress, daoABI, signer);
 
     return daoContract;
+}
+
+
+export const getTimeLineContract = ():ethers.Contract=>{
+    const provider = new ethers.providers.Web3Provider(web3.currentProvider as any);
+    const signer = provider.getSigner();
+    const timeLineContract = new ethers.Contract(TimeLineAddress, timeLineABI, signer);
+
+    return timeLineContract;
 }
