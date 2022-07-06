@@ -12,7 +12,7 @@ const Carousel: React.FC = () => {
   return (
     <div className={style.container}>
       <h1>Join the community, change the future</h1>
-      <p>A Fair DAO for voting on equality on garnerly’s internal decisions.</p>
+      <p>A Fair DAO for voting on equality on garnerly’s internal decisions using timeLine for decentralized governance</p>
       <RealTime />
       <div className={style.button}>
         <PrimaryLink info="Create Proposal" to="/proposal/create" />

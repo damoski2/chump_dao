@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import style from '../../styles/ProposalList.module.css';
 import Link from 'next/link'
 import { staticProposal, Proposal } from '../../static/staticProposal'
+import { BlockChainContext } from '../../context/BlockChainContext'
 
 
 type StyleProp = {
@@ -15,6 +16,8 @@ type StyleProp = {
 }
 
 const ListProposal: React.FC = () => {
+
+  const { allProposals } = useContext(BlockChainContext)
 
   const returnStyle: (value:string)=> StyleProp = (_status: string): StyleProp=>{
     switch(_status){

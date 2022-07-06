@@ -13,6 +13,16 @@ type TransactionData = {
   from: string,
 }
 
+type reducedProposal = {
+  id: number
+  passed: boolean;
+  exists: boolean;
+  countConducted: boolean;
+  votesDown: number;
+  votesUp: number;
+  description: string;
+}
+
 export const BlockChainContext: React.Context<T> = createContext<null>(null);
 
 let ethereum: any;
@@ -37,6 +47,7 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
   const [loading, setLoading] = useState<boolean>(false);
   const [totalProposal, setTotalProposal] = useState<number>(0);
   const [totalVote, setTotalVote] = useState<number>(0);
+  const [allProposals, setAllProposal] = useState<reducedProposal[]>([]);
 
   const getCryptoAssests = async (): Promise<void> => {
     const [data, error] = await fetchCryptoAssets();
@@ -131,10 +142,38 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
     }
   }
 
+  const fetchProposals = async(): Promise<string | void> =>{
+    try{
+      setLoading(true);
+      const proposals = await daoContract.fetchAllProposals({
+        from: currentUser
+      } as TransactionData);
+      //console.log(proposals)
+      let _reducedProposal = proposals.reduce((acc: Array<reducedProposal>, curr: any) => {
+          let obj = {
+            id: curr['id'].toNumber(),
+            passed: curr['passed'],
+            countConducted: curr['countConducted'],
+            description: curr['description'].toString(),
+            exists: curr['exists'].toString(),
+            votesDown: curr['votesDown'].toNumber(),
+            votesUp: curr['votesUp'].toNumber(),
+          } as reducedProposal;
+          acc = [...acc, obj];
+          return acc;
+      }, [])
+      setAllProposal(_reducedProposal)
+    }catch(error){
+      setLoading(false)
+      console.log(error)
+    }
+  }
+
 
   useEffect(() => {
     getCryptoAssests();
     checkIfWalletConnected()
+    fetchProposals()
   }, []);
 
   return (
@@ -146,6 +185,7 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
         loading,
         totalProposal,
         totalVote,
+        allProposals,
         connectWallet,
         buyTimeLine,
         createProposal
