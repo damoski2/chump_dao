@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import style from "../../styles/Carousel.module.css";
 import PrimaryLink from "../REUSABLES/PrimaryLink";
 import RealTime from "./RealTime";
 import { mouseIcon } from "../../Images";
 
+
 const Carousel: React.FC = () => {
+
+  
+
   return (
     <div className={style.container}>
       <h1>Join the community, change the future</h1>

@@ -1,9 +1,13 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import style from '../../styles/Carousel.module.css';
 import { writeIcon, dollarIcon, likeIcon, investorsIcon } from '../../Images'
+import { BlockChainContext } from "../../context/BlockChainContext";
 
 
 const RealTime: React.FC = () => {
+
+  const { totalProposal } = useContext(BlockChainContext);
+
   return (
     <div className={style.real__time} >
       <div className={style.inner__div} >
@@ -18,7 +22,7 @@ const RealTime: React.FC = () => {
           <img src={writeIcon} alt="dollarIcon" />
           <span>Total Proposal</span>
         </div>
-        <h2>1</h2>
+        <h2>{totalProposal ?? '4'}</h2>
       </div>
       <div className={style.inner__div} >
         <div className={style.inner__row} >

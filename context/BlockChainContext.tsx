@@ -59,8 +59,8 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
         let timeLineBalance = await timeLineContract.balanceOf(accounts[0]);
         timeLineBalance = ethers.utils.formatEther(timeLineBalance.toString());
         setTimeLineBalance(timeLineBalance);
+        //console.log(timeLineBalance.toString())
       }
-
       if(daoContract){
         let proposalTotal = await daoContract.totalProposal({
           from: accounts[0],
@@ -115,8 +115,26 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
     }
   };
 
+  const createProposal = async (about: string): Promise<string | void>=>{
+    try{
+      setLoading(true);
+      const transactionHash = await daoContract.createProposal(about, {
+        from: currentUser
+      } as TransactionData);
+      await transactionHash.wait();
+      setLoading(false)
+      toast.success('Proposal Created Successfully!')
+    }catch(error: any){
+      setLoading(false)
+      console.log(error.reason)
+      toast.error(`${error.reason ?? 'Proposal Creation Failed'}`)
+    }
+  }
+
+
   useEffect(() => {
     getCryptoAssests();
+    checkIfWalletConnected()
   }, []);
 
   return (
@@ -129,7 +147,8 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
         totalProposal,
         totalVote,
         connectWallet,
-        buyTimeLine
+        buyTimeLine,
+        createProposal
       }}
     >
       <Toaster
