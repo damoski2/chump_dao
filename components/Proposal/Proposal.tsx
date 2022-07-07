@@ -1,23 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import style from "../../styles/Proposal.module.css";
 import { noDataIllustration } from "../../Images";
-import { staticProposal, Proposal } from "../../static/staticProposal";
+import { staticProposal } from "../../static/staticProposal";
 import PrimaryButton from "../REUSABLES/PrimaryButton";
 import { trioCircle } from "../../Images";
 import ProgressBar from "@ramonak/react-progress-bar";
+import { BlockChainContext, reducedProposal } from '../../context/BlockChainContext';
+
 
 type Prop = {
   slug: string;
 };
 
 const Proposal: React.FC<Prop> = ({ slug }): JSX.Element => {
-  const [proposal, setProposal] = useState<Proposal>();
+
+
+  const { allProposals } = useContext(BlockChainContext)
+
+  const [proposal, setProposal] = useState<reducedProposal>();
 
   useEffect(() => {
     setProposal(
-      staticProposal?.find((proposal) => proposal.id === Number(slug))
+      allProposals?.find((proposal: reducedProposal) => proposal.id === Number(slug))
     );
-  }, [slug]);
+  }, [slug, allProposals]);
 
   const inValidProposal = (): JSX.Element => {
     return <div></div>;

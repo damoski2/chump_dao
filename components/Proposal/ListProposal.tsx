@@ -81,8 +81,8 @@ const ListProposal: React.FC = () => {
                 <p className={style.status} >Status</p>
             </div>
             <div className={style.rule} />
-            {staticProposal.map((proposal: Proposal, index: number) => (
-                <div key={index} className={style.actual__list}>
+            {allProposals.map((proposal: Proposal, index: number) => (
+                index!==0&&<div key={index} className={style.actual__list}>
                     <p>{proposal.id}</p>
                     <p className={style.description} >{proposal.description}</p>
                     <Link href={`/proposal/${proposal.id}`} >

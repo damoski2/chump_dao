@@ -13,7 +13,7 @@ type TransactionData = {
   from: string,
 }
 
-type reducedProposal = {
+export type reducedProposal = {
   id: number
   passed: boolean;
   exists: boolean;
@@ -21,6 +21,7 @@ type reducedProposal = {
   votesDown: number;
   votesUp: number;
   description: string;
+  status: string;
 }
 
 export const BlockChainContext: React.Context<T> = createContext<null>(null);
@@ -158,10 +159,12 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
             exists: curr['exists'].toString(),
             votesDown: curr['votesDown'].toNumber(),
             votesUp: curr['votesUp'].toNumber(),
+            status: curr['status'].toString()
           } as reducedProposal;
           acc = [...acc, obj];
           return acc;
       }, [])
+      //console.log(_reducedProposal)
       setAllProposal(_reducedProposal)
     }catch(error){
       setLoading(false)

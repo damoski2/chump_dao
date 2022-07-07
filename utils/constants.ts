@@ -4,7 +4,7 @@ import TimeLine from './TimeLine.json';
 
 
 export const daoABI = DAO.abi;
-export const DaoAddress: string = '0xF87AAa58d34B1A1a7b4B71f335B68186075EA0C9';
+export const DaoAddress: string = '0x1F1b92eED40fd9873011D3367A08EfA6BF47E0d0';
 
 export const daiTokenABI = DaiToken.abi;
 export const DaiTokenAddress: string = '0x4f79e0Cc87135E50e9b5e60e31726efD84522191'
