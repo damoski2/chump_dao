@@ -1,7 +1,16 @@
-import React from 'react'
+import React, { useEffect, useContext } from 'react'
 import { ListProposal } from '../../components/imports'
+import { BlockChainContext } from '../../context/BlockChainContext'
 
-const list: React.FC = () => {
+
+const List: React.FC = () => {
+
+    const { fetchProposals } = useContext(BlockChainContext)
+
+    useEffect(()=>{
+        fetchProposals()
+    },[])
+
     return (
         <div>
             <ListProposal />
@@ -9,4 +18,4 @@ const list: React.FC = () => {
     )
 }
 
-export default list
+export default List

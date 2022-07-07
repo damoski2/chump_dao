@@ -18,7 +18,7 @@ const CreateProposal: React.FC = () => {
     <form onSubmit={submit} className={style.container} >
         <div className={style.form__div} >
             <h1>Create Proposal</h1>
-            <textarea value={values.about} name="about" onChange={handleChange} />
+            <textarea value={values.about} name="about" onChange={handleChange()} />
             <PrimaryButton info='Submit' onPress={():void =>{}} />
         </div>
         <img src={proposalIllustration} alt="proposalIllustration" />

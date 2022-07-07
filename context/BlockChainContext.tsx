@@ -1,20 +1,26 @@
 import React, { createContext, useState, useEffect } from "react";
 import { ReturnData, fetchCryptoAssets } from "../api/crypto";
-import { getDaiTokenContract, getDaoContract, getTimeLineContract } from "./SmartContractProvider";
+import {
+  getDaiTokenContract,
+  getDaoContract,
+  getTimeLineContract,
+} from "./SmartContractProvider";
 import toast, { Toaster } from "react-hot-toast";
-import { ethers } from "ethers";
+import { ethers, BigNumber } from "ethers";
+import { DaiTokenAddress } from "../utils/constants";
+import Web3 from "web3";
 
 type ContextProp = {
   children: JSX.Element;
 };
 
 type TransactionData = {
-  value?: string,
-  from: string,
-}
+  value?: string;
+  from: string;
+};
 
 export type reducedProposal = {
-  id: number
+  id: number;
   passed: boolean;
   exists: boolean;
   countConducted: boolean;
@@ -22,7 +28,8 @@ export type reducedProposal = {
   votesUp: number;
   description: string;
   status: string;
-}
+  proposer: string;
+};
 
 export const BlockChainContext: React.Context<T> = createContext<null>(null);
 
@@ -33,6 +40,8 @@ if (typeof window !== "undefined") {
   ethereum = window.ethereum;
   solana = window.solana;
 }
+
+const web3 = new Web3(ethereum);
 
 export const BlockChainProvider: React.FC<ContextProp> = ({
   children,
@@ -48,13 +57,32 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
   const [loading, setLoading] = useState<boolean>(false);
   const [totalProposal, setTotalProposal] = useState<number>(0);
   const [totalVote, setTotalVote] = useState<number>(0);
+  const [totalMembers, setTotalMembers] = useState<number>(0);
+  const [totalAsset, setTotalAsset] = useState<string>(0);
   const [allProposals, setAllProposal] = useState<reducedProposal[]>([]);
+  const [networkSwitchModalOpen, setNetworkSwitchModalOpen] =
+    useState<boolean>(false);
 
   const getCryptoAssests = async (): Promise<void> => {
     const [data, error] = await fetchCryptoAssets();
     //console.log(data)
     setCryptoAssests(data);
   };
+
+  const convertEthToDollar = async(eth: number): Promise<string> =>{
+    try{
+      const [data , error] = await fetchCryptoAssets();
+    if(data){
+      const dollarValue = Math.round(data.market_price * eth);
+      return `$${dollarValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+    }
+    return '$41, 885,192.06'
+    }catch(error){
+      console.log(error)
+      return '$41, 885,192.06';
+    }
+  }
+  
 
   const checkIfWalletConnected = async (): Promise<void> => {
     try {
@@ -67,13 +95,16 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
       accounts.length && setCurrentUser(accounts[0]);
 
       //Set TimeLineBalance after user connection
-      if(timeLineContract){
+      if (timeLineContract) {
         let timeLineBalance = await timeLineContract.balanceOf(accounts[0]);
         timeLineBalance = ethers.utils.formatEther(timeLineBalance.toString());
         setTimeLineBalance(timeLineBalance);
-        //console.log(timeLineBalance.toString())
+
+        //Set Total Members
+        let totalMembers = await timeLineContract.investorsIndex();
+        setTotalMembers(totalMembers.toNumber());
       }
-      if(daoContract){
+      if (daoContract) {
         let proposalTotal = await daoContract.totalProposal({
           from: accounts[0],
         } as TransactionData);
@@ -83,12 +114,52 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
           from: accounts[0],
         } as TransactionData);
         setTotalVote(voteTotal.toNumber());
-      }
 
+        //Calculate and set total Assets relative to Pool;
+        let assestBalance = await daoContract.fetchTotalAsset({
+          from: accounts[0],
+        } as TransactionData);
+        setTotalAsset(await convertEthToDollar(assestBalance.toNumber()))
+        //console.log(assestBalance.toNumber());
+      }
     } catch (error) {
       setLoading(false);
       console.log(error);
       toast.error("Connection Error!");
+    }
+  };
+
+  const watchMetamaskNetwork = async (): Promise<string | void> => {
+    try {
+      if (!ethereum) return toast.error("Please Install Metamask");
+      //if(!currentUser) return toast.error("Please Connect to Metamask");
+      const networkId = await ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      if (networkId !== "1") {
+        setNetworkSwitchModalOpen(true);
+      }
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
+  };
+
+  const changeNetwork = (): void => {
+    setNetworkSwitchModalOpen(!networkSwitchModalOpen);
+  };
+
+  const switchNetwork = async (chainId: number): Promise<string | void> => {
+    try {
+      if (!ethereum) return toast.error("Please install MetaMask");
+      await ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: chainId.toString() }],
+      });
+      setLoading(true);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
     }
   };
 
@@ -109,89 +180,118 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
     }
   };
 
-  const buyTimeLine = async (number: number): Promise<string | void> => {
+  const buyTimeLine = async (number: string): Promise<string | void> => {
     try {
       setLoading(true);
-      if(!ethereum) return toast.error("Please Install MetaMask");
+      if (!ethereum) return toast.error("Please Install MetaMask");
       const transactionHash = await daiTokenContract.buytimeline({
-        value: number.toString(),
-        from: currentUser
+        value: number,
+        from: currentUser,
       } as TransactionData);
       await transactionHash.wait();
       setLoading(false);
       toast.success("Transaction Successful!");
     } catch (error) {
       setLoading(false);
-      console.log(error)
-      toast.error("Transaction Failed, Check Args or User Ethers supply!")
+      console.log(error);
+      toast.error("Transaction Failed, Check Args or User Ethers supply!");
     }
   };
 
-  const createProposal = async (about: string): Promise<string | void>=>{
-    try{
+  const createProposal = async (about: string): Promise<string | void> => {
+    try {
       setLoading(true);
       const transactionHash = await daoContract.createProposal(about, {
-        from: currentUser
+        from: currentUser,
       } as TransactionData);
       await transactionHash.wait();
-      setLoading(false)
-      toast.success('Proposal Created Successfully!')
-    }catch(error: any){
-      setLoading(false)
-      console.log(error.reason)
-      toast.error(`${error.reason ?? 'Proposal Creation Failed'}`)
+      setLoading(false);
+      toast.success("Proposal Created Successfully!");
+    } catch (error: any) {
+      setLoading(false);
+      console.log(error.reason);
+      toast.error(`${error.reason ?? "Proposal Creation Failed"}`);
     }
-  }
+  };
 
-  const proposalVote = async(id: number, vote: boolean): Promise<string | void>=>{
+  const proposalVote = async (
+    id: number,
+    vote: boolean
+  ): Promise<string | void> => {
+    try {
+      setLoading(true);
+      const transactionHash = await daoContract.voteOnProposal(id, vote, {
+        from: currentUser,
+      } as TransactionData);
+      await transactionHash.wait();
+      setLoading(false);
+      toast.success("Vote Successful!");
+    } catch (error: any) {
+      setLoading(false);
+      console.log(error.reason);
+      toast.error(`${error.reason ?? "Voting Failed"}`);
+    }
+  };
+
+  const concludeProposal = async (id: number): Promise<string | void> => {
     try{
       setLoading(true)
-      const transactionHash = await daoContract.voteOnProposal(id, vote, {
-        from: currentUser
-      } as TransactionData)
-      await transactionHash.wait()
-    }catch(error: any){
+      const transactionHash = await daoContract.countVotes(id, { from: currentUser } as TransactionData);
+      await transactionHash.wait();
       setLoading(false)
-      console.log(error.reason)
-      toast.error(`${error.reason ?? 'Voting Failed'}`)
+      toast.success("Proposal Concluded Successfully!")
+    }catch(error: any){
+      setLoading(false);
+      console.log(error)
+      toast.error(error.reason)
     }
   }
 
-  const fetchProposals = async(): Promise<string | void> =>{
-    try{
+  const fetchProposals = async (): Promise<string | void> => {
+    try {
       setLoading(true);
       const proposals = await daoContract.fetchAllProposals({
-        from: currentUser
+        from: currentUser,
       } as TransactionData);
       //console.log(proposals)
-      let _reducedProposal = proposals.reduce((acc: Array<reducedProposal>, curr: any) => {
+      let _reducedProposal = proposals.reduce(
+        (acc: Array<reducedProposal>, curr: any) => {
           let obj = {
-            id: curr['id'].toNumber(),
-            passed: curr['passed'],
-            countConducted: curr['countConducted'],
-            description: curr['description'].toString(),
-            exists: curr['exists'].toString(),
-            votesDown: curr['votesDown'].toNumber(),
-            votesUp: curr['votesUp'].toNumber(),
-            status: curr['status'].toString()
+            id: curr["id"].toNumber(),
+            passed: curr["passed"],
+            countConducted: curr["countConducted"],
+            description: curr["description"].toString(),
+            exists: curr["exists"].toString(),
+            votesDown: curr["votesDown"].toNumber(),
+            votesUp: curr["votesUp"].toNumber(),
+            status: curr["status"].toString(),
+            proposer: curr["proposer"].toString(),
           } as reducedProposal;
           acc = [...acc, obj];
           return acc;
-      }, [])
+        },
+        []
+      );
       //console.log(_reducedProposal)
-      setAllProposal(_reducedProposal)
-    }catch(error){
-      setLoading(false)
-      console.log(error)
+      setAllProposal(_reducedProposal);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
     }
-  }
-
+  };
 
   useEffect(() => {
     getCryptoAssests();
-    checkIfWalletConnected()
-    fetchProposals()
-  }, []);
+    checkIfWalletConnected();
+    fetchProposals();
+  }, [loading]);
+
+  useEffect(() => {
+    currentUser &&
+      setTimeout(() => {
+        watchMetamaskNetwork();
+      }, 10000);
+  }, [currentUser]);
 
   return (
     <BlockChainContext.Provider
@@ -203,10 +303,15 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
         totalProposal,
         totalVote,
         allProposals,
+        totalMembers,
+        totalAsset,
         connectWallet,
         buyTimeLine,
         createProposal,
-        proposalVote
+        proposalVote,
+        changeNetwork,
+        fetchProposals,
+        concludeProposal
       }}
     >
       <Toaster

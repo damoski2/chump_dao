@@ -6,7 +6,7 @@ import { BlockChainContext } from "../../context/BlockChainContext";
 
 const RealTime: React.FC = () => {
 
-  const { totalProposal } = useContext(BlockChainContext);
+  const { totalProposal, totalVote, totalMembers, totalAsset } = useContext(BlockChainContext);
 
   return (
     <div className={style.real__time} >
@@ -15,7 +15,7 @@ const RealTime: React.FC = () => {
           <img src={dollarIcon} alt="dollarIcon" />
           <span>Assests under management</span>
         </div>
-        <h2>$41, 885,192.06</h2>
+        <h2>{totalAsset ?? '$41, 885,192.06'}</h2>
       </div>
       <div className={style.inner__div} >
         <div className={style.inner__row} >
@@ -29,14 +29,14 @@ const RealTime: React.FC = () => {
           <img src={likeIcon} alt="dollarIcon" />
           <span>Total Votes</span>
         </div>
-        <h2>8.5M</h2>
+        <h2>{totalVote ?? '8.5M'}</h2>
       </div>
       <div className={style.inner__div} >
         <div className={style.inner__row} >
           <img src={investorsIcon} alt="dollarIcon" />
           <span>Members</span>
         </div>
-        <h2>19</h2>
+        <h2>{totalMembers ?? '19'}</h2>
       </div>
     </div>
   )

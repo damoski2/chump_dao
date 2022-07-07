@@ -6,7 +6,7 @@ import { ethers } from 'ethers'
 type onChangeEventType = React.ChangeEvent<HTMLTextAreaElement> | React.ChangeEvent<HTMLInputElement>
 
 interface  FormReturn  {
-    handleChange: (e: onChangeEventType ) => void;
+    handleChange: (id?:number) =>(e: onChangeEventType ) => void;
     submit: (e: React.FormEvent<HTMLFormElement>) => void;
     values: any
 }
@@ -15,14 +15,18 @@ interface  FormReturn  {
 export const useForm = (callback: (param?:string| number, param2?:boolean)=> Promise<string | void>, type: string, initialState: any ={}): FormReturn=>{
     const [values, setValues] = useState(initialState)
 
-    const handleChange = (e: onChangeEventType)=>{
+    const handleChange =(id?: number)=> (e: onChangeEventType)=>{
         switch(type){
             case 'createProposal':
                 setValues({...values, [e.target.name]: e.target.value})
                 break;
 
             case 'proposalVote':
-                e.target.value == 'For'? setValues({...values, vote: true }) : setValues({...values, vote: false})
+                e.target.value == 'For'? setValues({...values, vote: true, id: id }) : setValues({...values, vote: false, id: id})
+                break;
+
+            case 'buyTimeLine':
+                setValues({...values, [e.target.name]: e.target.value })
                 break;
 
             default:
@@ -34,13 +38,20 @@ export const useForm = (callback: (param?:string| number, param2?:boolean)=> Pro
         e.preventDefault();
         switch(type){
             case 'createProposal':
-                callback(values.about);
+                callback(values.about).then(()=>{
+                    setValues({...values, about: ''})
+                }).catch(err=>{
+                    setValues({...values, about: ''})
+                })
                 break;
 
             case 'proposalVote':
-                console.log(values)
-                //callback(values.id, values.vote);
+                callback(values.id, values.vote);
                 break;
+
+            case 'buyTimeLine':
+                let timeLineAmount = ethers.utils.parseEther(values.amount)
+                callback(timeLineAmount.toString());
 
             default:
                 break;

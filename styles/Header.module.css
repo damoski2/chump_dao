@@ -24,8 +24,12 @@
   font-family: "Inter";
 }
 
+.container .logo{
+  cursor: pointer;
+}
+
 .links {
-  width: 50%;
+  flex: .7;
   position: relative;
   display: flex;
   justify-content: space-between;
@@ -43,12 +47,6 @@
 
 .links li img {
   margin-left: 6px;
-}
-
-.links .dao {
-  border: 1.5px solid #000000;
-  padding: 10px 14px;
-  border-radius: 7px;
 }
 
 .humbuger {
