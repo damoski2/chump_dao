@@ -143,6 +143,20 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
     }
   }
 
+  const proposalVote = async(id: number, vote: boolean): Promise<string | void>=>{
+    try{
+      setLoading(true)
+      const transactionHash = await daoContract.voteOnProposal(id, vote, {
+        from: currentUser
+      } as TransactionData)
+      await transactionHash.wait()
+    }catch(error: any){
+      setLoading(false)
+      console.log(error.reason)
+      toast.error(`${error.reason ?? 'Voting Failed'}`)
+    }
+  }
+
   const fetchProposals = async(): Promise<string | void> =>{
     try{
       setLoading(true);
@@ -191,7 +205,8 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
         allProposals,
         connectWallet,
         buyTimeLine,
-        createProposal
+        createProposal,
+        proposalVote
       }}
     >
       <Toaster

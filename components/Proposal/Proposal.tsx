@@ -6,16 +6,27 @@ import PrimaryButton from "../REUSABLES/PrimaryButton";
 import { trioCircle } from "../../Images";
 import ProgressBar from "@ramonak/react-progress-bar";
 import { BlockChainContext, reducedProposal } from '../../context/BlockChainContext';
+import { useForm } from '../../hooks/form';
 
 
 type Prop = {
   slug: string;
 };
 
+type VoteParam ={
+  id: number;
+  vote: boolean | null;
+}
+
 const Proposal: React.FC<Prop> = ({ slug }): JSX.Element => {
 
 
-  const { allProposals } = useContext(BlockChainContext)
+  const { allProposals, proposalVote } = useContext(BlockChainContext)
+
+  const { handleChange, submit, values } = useForm(proposalVote, 'proposalVote', {
+    id: Number(slug),
+    vote: null
+  } as VoteParam)
 
   const [proposal, setProposal] = useState<reducedProposal>();
 
@@ -87,16 +98,16 @@ const Proposal: React.FC<Prop> = ({ slug }): JSX.Element => {
       <h2 className={style.proposal__description__heading} >{proposal?.description ?? "Default description"}</h2>
       <div className={style.proposal__section}>
         {validProposal()}
-        <form className={style.cast__vote}>
+        <form onSubmit={submit} className={style.cast__vote}>
           <h2>Cast Vote</h2>
           <div className={style.input__div}>
             <div>
-              <input type="radio" value="For" id="For" />
+              <input type="radio" value="For" name="vote" id="For" onChange={handleChange} />
               <label htmlFor="For">For</label>
             </div>
             <div>
-              <input type="radio" value="For" id="For" />
-              <label htmlFor="For">Against</label>
+              <input type="radio" value="Against" name="vote" id="Against" onChange={handleChange} />
+              <label htmlFor="Against">Against</label>
             </div>
           </div>
           <PrimaryButton info="Submit" onPress={():void =>{}} />
