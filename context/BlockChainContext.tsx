@@ -93,7 +93,6 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
       const { chainId } = await provider.getNetwork();
       if (chainId !== 4) {
         changeNetwork();
-        toast.error("Please Switch to Rinkeby Network");
         return false;
       }
       return true;
@@ -108,6 +107,7 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
   };
 
   const checkIfWalletConnected = async (): Promise<void> => {
+    let onRinkeby: boolean | void;
     try {
       setLoading(true);
       if (!ethereum) return alert("Please Install Metamask");
@@ -117,7 +117,12 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
       });
       accounts.length && setCurrentUser(accounts[0]);
 
-      //Set TimeLineBalance after user connection
+      //Set Network Correction
+      onRinkeby = await watchMetamaskNetworkRinkeby();
+      console.log(onRinkeby);
+      if (!onRinkeby) return toast.error("Please Switch to Rinkeby Network");
+
+      //Set TimeLineBalance after user connection success
       if (timeLineContract) {
         let timeLineBalance = await timeLineContract.balanceOf(accounts[0]);
         timeLineBalance = ethers.utils.formatEther(timeLineBalance.toString());
@@ -145,6 +150,10 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
         setTotalAsset(await convertEthToDollar(assestBalance.toNumber()));
         //console.log(assestBalance.toNumber());
       }
+
+      /*     await setTimeout(async () => {
+        
+      }, 3000); */
     } catch (error) {
       setLoading(false);
       console.log(error);
@@ -180,6 +189,7 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
       localStorage.setItem("chumpDaoConnected", accounts[0]);
       await setTimeout(() => {
         onRinkeby = watchMetamaskNetworkRinkeby();
+        if (!onRinkeby) return toast.error("Please Switch to Rinkeby Network");
       }, 3000);
     } catch (error) {
       setLoading(false);
