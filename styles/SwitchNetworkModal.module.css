@@ -6,4 +6,83 @@
     top: 0;
     left: 0;
     z-index: 9999;
+    display: flex;
+    font-family: 'Inter';
+}
+
+.actual__modal{
+    width: 70%;
+    height: 45vh;
+    margin: auto auto;
+    background: #fff;
+    display: flex;
+}
+
+.info{
+    border-right:  1px solid rgba(116, 113, 113, 0.2);
+    width: 50%;
+    padding: 63px 33px;
+}
+
+.info h2, .info p{
+    margin: 0;
+}
+
+.info h2{
+    width: 100%;
+    font-weight: 400;
+    margin-bottom: 32px;
+}
+
+.info p{
+    color: #8016EB;
+}
+
+.network{
+    width: 50%;
+    padding: 63px 33px;
+}
+
+
+.network h2, .network p{
+    margin: 0;
+}
+
+.network h1{
+    text-align: left;
+    color: #8016EB;
+    margin-top: 23px;
+    width: fit-content;
+    padding-bottom: 1px;
+    border-bottom: 1px solid #8016EB;
+    cursor: pointer;
+}
+
+@media(max-width:992px){
+    .actual__modal{
+        width: 90%;
+    }
+}
+
+@media(max-width:768px){
+    .actual__modal{
+        flex-direction: column;
+    }
+
+    .info, .network{
+        width: 100%;
+    }
+
+    .info{
+        border-bottom: 1px solid rgba(116, 113, 113, 0.2);
+        overflow-y: hidden;
+    }
+
+    .network{
+        overflow-y: hidden;
+    }
+
+    .container h2, .container p, .container h1{
+        line-height: unset;
+    }
 }

@@ -58,10 +58,10 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
   const [totalProposal, setTotalProposal] = useState<number>(0);
   const [totalVote, setTotalVote] = useState<number>(0);
   const [totalMembers, setTotalMembers] = useState<number>(0);
-  const [totalAsset, setTotalAsset] = useState<string>(0);
+  const [totalAsset, setTotalAsset] = useState<string>('0');
   const [allProposals, setAllProposal] = useState<reducedProposal[]>([]);
-  const [networkSwitchModalOpen, setNetworkSwitchModalOpen] =
-    useState<boolean>(false);
+  const [networkSwitchModalOpen, setNetworkSwitchModalOpen] = useState<boolean>(false)
+  const [networkChain, setNetworkChain] = useState<number>(0)
 
   const getCryptoAssests = async (): Promise<void> => {
     const [data, error] = await fetchCryptoAssets();
@@ -106,7 +106,7 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
     setNetworkSwitchModalOpen(!networkSwitchModalOpen);
   };
 
-  const checkIfWalletConnected = async (): Promise<void> => {
+  const checkIfWalletConnected = async (): Promise<void | string> => {
     let onRinkeby: boolean | void;
     try {
       setLoading(true);
@@ -169,6 +169,8 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
         params: [{ chainId: chainId.toString() }],
       });
       setLoading(true);
+      changeNetwork()
+      setNetworkChain(chainId)
     } catch (error) {
       setLoading(false);
       console.log(error);
@@ -187,10 +189,10 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
       setCurrentUser(accounts[0]);
       setLoading(false);
       localStorage.setItem("chumpDaoConnected", accounts[0]);
-      await setTimeout(() => {
+      /* await setTimeout(() => {
         onRinkeby = watchMetamaskNetworkRinkeby();
         if (!onRinkeby) return toast.error("Please Switch to Rinkeby Network");
-      }, 3000);
+      }, 3000); */
     } catch (error) {
       setLoading(false);
       console.log(error);
@@ -326,10 +328,13 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
     getCryptoAssests();
   }, []);
 
-  useEffect(() => {
+  useEffect(()=>{
     if (localStorage.getItem("chumpDaoConnected")) {
       checkIfWalletConnected();
     }
+  },[])
+
+  useEffect(() => {
     //fetchProposals();
   }, [currentUser]);
 
@@ -352,6 +357,7 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
         changeNetwork,
         fetchProposals,
         concludeProposal,
+        switchNetwork
       }}
     >
       <Toaster
