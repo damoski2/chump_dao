@@ -69,20 +69,43 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
     setCryptoAssests(data);
   };
 
-  const convertEthToDollar = async(eth: number): Promise<string> =>{
-    try{
-      const [data , error] = await fetchCryptoAssets();
-    if(data){
-      const dollarValue = Math.round(data.market_price * eth);
-      return `$${dollarValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+  const convertEthToDollar = async (eth: number): Promise<string> => {
+    try {
+      const [data, error] = await fetchCryptoAssets();
+      if (data) {
+        const dollarValue = Math.round(data.market_price * eth);
+        return `$${dollarValue
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+      }
+      return "$41, 885,192.06";
+    } catch (error) {
+      console.log(error);
+      return "$41, 885,192.06";
     }
-    return '$41, 885,192.06'
-    }catch(error){
-      console.log(error)
-      return '$41, 885,192.06';
+  };
+
+  const watchMetamaskNetworkRinkeby = async (): Promise<boolean | void> => {
+    try {
+      const provider = new ethers.providers.Web3Provider(
+        web3.currentProvider as any
+      );
+      const { chainId } = await provider.getNetwork();
+      if (chainId !== 4) {
+        changeNetwork();
+        toast.error("Please Switch to Rinkeby Network");
+        return false;
+      }
+      return true;
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
     }
-  }
-  
+  };
+
+  const changeNetwork = (): void => {
+    setNetworkSwitchModalOpen(!networkSwitchModalOpen);
+  };
 
   const checkIfWalletConnected = async (): Promise<void> => {
     try {
@@ -119,7 +142,7 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
         let assestBalance = await daoContract.fetchTotalAsset({
           from: accounts[0],
         } as TransactionData);
-        setTotalAsset(await convertEthToDollar(assestBalance.toNumber()))
+        setTotalAsset(await convertEthToDollar(assestBalance.toNumber()));
         //console.log(assestBalance.toNumber());
       }
     } catch (error) {
@@ -127,26 +150,6 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
       console.log(error);
       toast.error("Connection Error!");
     }
-  };
-
-  const watchMetamaskNetwork = async (): Promise<string | void> => {
-    try {
-      if (!ethereum) return toast.error("Please Install Metamask");
-      //if(!currentUser) return toast.error("Please Connect to Metamask");
-      const networkId = await ethereum.request({
-        method: "eth_requestAccounts",
-      });
-      if (networkId !== "1") {
-        setNetworkSwitchModalOpen(true);
-      }
-    } catch (error) {
-      setLoading(false);
-      console.log(error);
-    }
-  };
-
-  const changeNetwork = (): void => {
-    setNetworkSwitchModalOpen(!networkSwitchModalOpen);
   };
 
   const switchNetwork = async (chainId: number): Promise<string | void> => {
@@ -165,6 +168,7 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
 
   const connectWallet = async (): Promise<string | void> => {
     //console.log('pressed')
+    let onRinkeby: Promise<boolean | void>;
     try {
       setLoading(true);
       if (!ethereum) return toast.error("Please install MetaMask");
@@ -173,10 +177,31 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
       });
       setCurrentUser(accounts[0]);
       setLoading(false);
+      localStorage.setItem("chumpDaoConnected", accounts[0]);
+      await setTimeout(() => {
+        onRinkeby = watchMetamaskNetworkRinkeby();
+      }, 3000);
     } catch (error) {
       setLoading(false);
       console.log(error);
       toast.error("No Ethereum Object!");
+    }
+  };
+
+  const disconnectWallet = async (): Promise<string | void> => {
+    try {
+      setLoading(true);
+      setCurrentUser("");
+      setTimeLineBalance("0");
+      localStorage.removeItem("chumpDaoConnected");
+      setLoading(false);
+      toast.success(
+        "Cookie disconnected, Now disconnect from Meta mask wallet to complete logout"
+      );
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+      toast.error("Error disconnecting wallet");
     }
   };
 
@@ -234,20 +259,27 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
   };
 
   const concludeProposal = async (id: number): Promise<string | void> => {
-    try{
-      setLoading(true)
-      const transactionHash = await daoContract.countVotes(id, { from: currentUser } as TransactionData);
+    try {
+      setLoading(true);
+      const transactionHash = await daoContract.countVotes(id, {
+        from: currentUser,
+      } as TransactionData);
       await transactionHash.wait();
-      setLoading(false)
-      toast.success("Proposal Concluded Successfully!")
-    }catch(error: any){
       setLoading(false);
-      console.log(error)
-      toast.error(error.reason)
+      toast.success("Proposal Concluded Successfully!");
+    } catch (error: any) {
+      setLoading(false);
+      console.log(error);
+      toast.error(error.reason);
     }
-  }
+  };
 
   const fetchProposals = async (): Promise<string | void> => {
+    let onRinkeby: Promise<boolean | void>;
+    onRinkeby = watchMetamaskNetworkRinkeby();
+    setTimeout(() => {
+      if (!onRinkeby) return changeNetwork();
+    }, 3000);
     try {
       setLoading(true);
       const proposals = await daoContract.fetchAllProposals({
@@ -282,15 +314,13 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
 
   useEffect(() => {
     getCryptoAssests();
-    checkIfWalletConnected();
-    fetchProposals();
-  }, [loading]);
+  }, []);
 
   useEffect(() => {
-    currentUser &&
-      setTimeout(() => {
-        watchMetamaskNetwork();
-      }, 10000);
+    if (localStorage.getItem("chumpDaoConnected")) {
+      checkIfWalletConnected();
+    }
+    //fetchProposals();
   }, [currentUser]);
 
   return (
@@ -311,7 +341,7 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
         proposalVote,
         changeNetwork,
         fetchProposals,
-        concludeProposal
+        concludeProposal,
       }}
     >
       <Toaster
