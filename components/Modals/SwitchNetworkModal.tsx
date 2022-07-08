@@ -5,9 +5,13 @@ import { BlockChainContext } from '../../context/BlockChainContext'
 
 const SwitchNetworkModal = (): JSX.Element => {
 
-  const { switchNetwork } = useContext(BlockChainContext);
+  const { switchNetwork, networkSwitchModalOpen } = useContext(BlockChainContext);
 
-  return (
+  const net_switch =()=>{
+    switchNetwork('0x4');
+  }
+
+  return networkSwitchModalOpen && (
     <div className={style.container} >
       <div className={style.actual__modal}>
         <div className={style.info} >
@@ -16,7 +20,7 @@ const SwitchNetworkModal = (): JSX.Element => {
         </div>
         <div className={style.network} >
             <p>Network:</p>
-            <h1 onClick={switchNetwork(4)} >Rinkeby</h1>
+            <span onClick={net_switch} >Rinkeby</span>
         </div>
       </div>
     </div>

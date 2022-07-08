@@ -7,11 +7,13 @@ import { BlockChainContext } from "../../context/BlockChainContext";
 import Link from "next/link";
 import Identicon from "identicon.js";
 import { useRouter } from "next/router";
+import SecondaryButton from "../REUSABLES/SecondaryButton";
 
 const Header: React.FC = () => {
   const router = useRouter();
 
-  const { connectWallet, currentUser } = useContext(BlockChainContext);
+  const { connectWallet, currentUser, disconnectWallet } =
+    useContext(BlockChainContext);
 
   const formatUser: () => string = (): string => {
     if (currentUser) {
@@ -51,12 +53,12 @@ const Header: React.FC = () => {
             <li>
               App <img src={pointerDown} alt="pointerDown" />{" "}
             </li>
-          </Link> */}
+          </Link> 
           <Link href="/">
             <li style={returnActiveStyle("/")} className={style.dao}>
               DAO
             </li>
-          </Link>
+          </Link>*/}
           <Link href="/timeline/purchase">
             <li style={returnActiveStyle("/timeline/purchase")}>Timeline</li>
           </Link>
@@ -68,15 +70,18 @@ const Header: React.FC = () => {
           </Link>
         </ul>
         {currentUser ? (
-          <div className={style.eth__address}>
-            <img
-              src={`data:image/png;base64,${new Identicon(
-                currentUser,
-                30
-              ).toString()}`}
-              alt="currentUser"
-            />
-            <p>{formatUser()}</p>
+          <div className={style.auth__section} >
+            <div className={style.eth__address}>
+              <img
+                src={`data:image/png;base64,${new Identicon(
+                  currentUser,
+                  30
+                ).toString()}`}
+                alt="currentUser"
+              />
+              <p>{formatUser()}</p>
+            </div>
+            <SecondaryButton info="Log Out" onPress={disconnectWallet} />
           </div>
         ) : (
           <div className={style.button}>

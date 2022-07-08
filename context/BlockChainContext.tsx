@@ -55,13 +55,13 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
   const [cryptoAssets, setCryptoAssests] = useState<ReturnData | null>();
   const [timeLineBalance, setTimeLineBalance] = useState<string>("0");
   const [loading, setLoading] = useState<boolean>(false);
-  const [totalProposal, setTotalProposal] = useState<number>(0);
-  const [totalVote, setTotalVote] = useState<number>(0);
-  const [totalMembers, setTotalMembers] = useState<number>(0);
-  const [totalAsset, setTotalAsset] = useState<string>('0');
+  const [totalProposal, setTotalProposal] = useState<number | null>(null);
+  const [totalVote, setTotalVote] = useState<number | null>(null);
+  const [totalMembers, setTotalMembers] = useState<number | null>(null);
+  const [totalAsset, setTotalAsset] = useState<string | null>(null);
   const [allProposals, setAllProposal] = useState<reducedProposal[]>([]);
-  const [networkSwitchModalOpen, setNetworkSwitchModalOpen] = useState<boolean>(false)
-  const [networkChain, setNetworkChain] = useState<number>(0)
+  const [networkSwitchModalOpen, setNetworkSwitchModalOpen] = useState<boolean>(false);
+  const [networkChain, setNetworkChain] = useState<string>('0');
 
   const getCryptoAssests = async (): Promise<void> => {
     const [data, error] = await fetchCryptoAssets();
@@ -117,43 +117,42 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
       });
       accounts.length && setCurrentUser(accounts[0]);
 
-      //Set Network Correction
-      onRinkeby = await watchMetamaskNetworkRinkeby();
-      console.log(onRinkeby);
-      if (!onRinkeby) return toast.error("Please Switch to Rinkeby Network");
+      await setTimeout(async () => {
+        //Set Network Correction
+        onRinkeby = await watchMetamaskNetworkRinkeby();
+        if (!onRinkeby) return;
 
-      //Set TimeLineBalance after user connection success
-      if (timeLineContract) {
-        let timeLineBalance = await timeLineContract.balanceOf(accounts[0]);
-        timeLineBalance = ethers.utils.formatEther(timeLineBalance.toString());
-        setTimeLineBalance(timeLineBalance);
+        //Set TimeLineBalance after user connection success
+        if (timeLineContract) {
+          let timeLineBalance = await timeLineContract.balanceOf(accounts[0]);
+          timeLineBalance = ethers.utils.formatEther(
+            timeLineBalance.toString()
+          );
+          setTimeLineBalance(timeLineBalance);
 
-        //Set Total Members
-        let totalMembers = await timeLineContract.investorsIndex();
-        setTotalMembers(totalMembers.toNumber());
-      }
-      if (daoContract) {
-        let proposalTotal = await daoContract.totalProposal({
-          from: accounts[0],
-        } as TransactionData);
-        setTotalProposal(proposalTotal.toNumber());
+          //Set Total Members
+          let totalMembers = await timeLineContract.investorsIndex();
+          setTotalMembers(totalMembers.toNumber());
+        }
+        if (daoContract) {
+          let proposalTotal = await daoContract.totalProposal({
+            from: accounts[0],
+          } as TransactionData);
+          setTotalProposal(proposalTotal.toNumber());
 
-        let voteTotal = await daoContract.totalVote({
-          from: accounts[0],
-        } as TransactionData);
-        setTotalVote(voteTotal.toNumber());
+          let voteTotal = await daoContract.totalVote({
+            from: accounts[0],
+          } as TransactionData);
+          setTotalVote(voteTotal.toNumber());
 
-        //Calculate and set total Assets relative to Pool;
-        let assestBalance = await daoContract.fetchTotalAsset({
-          from: accounts[0],
-        } as TransactionData);
-        setTotalAsset(await convertEthToDollar(assestBalance.toNumber()));
-        //console.log(assestBalance.toNumber());
-      }
-
-      /*     await setTimeout(async () => {
-        
-      }, 3000); */
+          //Calculate and set total Assets relative to Pool;
+          let assestBalance = await daoContract.fetchTotalAsset({
+            from: accounts[0],
+          } as TransactionData);
+          setTotalAsset(await convertEthToDollar(assestBalance.toNumber()));
+          //console.log(assestBalance.toNumber());
+        }
+      }, 3000);
     } catch (error) {
       setLoading(false);
       console.log(error);
@@ -161,16 +160,16 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
     }
   };
 
-  const switchNetwork = async (chainId: number): Promise<string | void> => {
+  const switchNetwork = async (chainId: string): Promise<string | void> => {
     try {
       if (!ethereum) return toast.error("Please install MetaMask");
       await ethereum.request({
         method: "wallet_switchEthereumChain",
-        params: [{ chainId: chainId.toString() }],
+        params: [{ chainId: chainId }],
       });
       setLoading(true);
-      changeNetwork()
-      setNetworkChain(chainId)
+      changeNetwork();
+      setNetworkChain(chainId);
     } catch (error) {
       setLoading(false);
       console.log(error);
@@ -288,55 +287,56 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
 
   const fetchProposals = async (): Promise<string | void> => {
     let onRinkeby: Promise<boolean | void>;
-    onRinkeby = watchMetamaskNetworkRinkeby();
-    setTimeout(() => {
+    await setTimeout(async() => {
+      onRinkeby = watchMetamaskNetworkRinkeby();
       if (!onRinkeby) return changeNetwork();
+      try {
+        setLoading(true);
+        const proposals = await daoContract.fetchAllProposals({
+          from: currentUser,
+        } as TransactionData);
+        //console.log(proposals)
+        let _reducedProposal = proposals.reduce(
+          (acc: Array<reducedProposal>, curr: any) => {
+            let obj = {
+              id: curr["id"].toNumber(),
+              passed: curr["passed"],
+              countConducted: curr["countConducted"],
+              description: curr["description"].toString(),
+              exists: curr["exists"].toString(),
+              votesDown: curr["votesDown"].toNumber(),
+              votesUp: curr["votesUp"].toNumber(),
+              status: curr["status"].toString(),
+              proposer: curr["proposer"].toString(),
+            } as reducedProposal;
+            acc = [...acc, obj];
+            return acc;
+          },
+          []
+        );
+        //console.log(_reducedProposal)
+        setAllProposal(_reducedProposal);
+      } catch (error) {
+        setLoading(false);
+        console.log(error);
+      }
     }, 3000);
-    try {
-      setLoading(true);
-      const proposals = await daoContract.fetchAllProposals({
-        from: currentUser,
-      } as TransactionData);
-      //console.log(proposals)
-      let _reducedProposal = proposals.reduce(
-        (acc: Array<reducedProposal>, curr: any) => {
-          let obj = {
-            id: curr["id"].toNumber(),
-            passed: curr["passed"],
-            countConducted: curr["countConducted"],
-            description: curr["description"].toString(),
-            exists: curr["exists"].toString(),
-            votesDown: curr["votesDown"].toNumber(),
-            votesUp: curr["votesUp"].toNumber(),
-            status: curr["status"].toString(),
-            proposer: curr["proposer"].toString(),
-          } as reducedProposal;
-          acc = [...acc, obj];
-          return acc;
-        },
-        []
-      );
-      //console.log(_reducedProposal)
-      setAllProposal(_reducedProposal);
-    } catch (error) {
-      setLoading(false);
-      console.log(error);
-    }
   };
 
   useEffect(() => {
     getCryptoAssests();
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (localStorage.getItem("chumpDaoConnected")) {
       checkIfWalletConnected();
     }
-  },[])
+    fetchProposals();
+  }, [networkChain, currentUser]);
 
-  useEffect(() => {
-    //fetchProposals();
-  }, [currentUser]);
+/*   useEffect(() => {
+    fetchProposals();
+  }, [currentUser]); */
 
   return (
     <BlockChainContext.Provider
@@ -350,6 +350,7 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
         allProposals,
         totalMembers,
         totalAsset,
+        networkSwitchModalOpen,
         connectWallet,
         buyTimeLine,
         createProposal,
@@ -357,7 +358,8 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
         changeNetwork,
         fetchProposals,
         concludeProposal,
-        switchNetwork
+        switchNetwork,
+        disconnectWallet
       }}
     >
       <Toaster

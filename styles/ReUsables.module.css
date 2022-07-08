@@ -7,3 +7,14 @@
     border: none;
     cursor: pointer;
 }
+
+.secondary__button{
+    width: fit-content;
+    padding: 20px 26px;
+    background-color: #fff;
+    color: #8016EB;
+    border-radius: 7px;
+    border: none;
+    cursor: pointer;
+    border: 1px solid rgba(128, 22, 235, .2);
+}

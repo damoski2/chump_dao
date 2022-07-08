@@ -48,7 +48,7 @@
     margin: 0;
 }
 
-.network h1{
+.network span{
     text-align: left;
     color: #8016EB;
     margin-top: 23px;
@@ -56,6 +56,7 @@
     padding-bottom: 1px;
     border-bottom: 1px solid #8016EB;
     cursor: pointer;
+    font-size: 64px;
 }
 
 @media(max-width:992px){

@@ -29,7 +29,7 @@
 }
 
 .links {
-  flex: .7;
+  flex: .4;
   position: relative;
   display: flex;
   justify-content: space-between;
@@ -79,19 +79,26 @@
 }
 
 .eth__address{
-  background: #8016EB;
-  color: #fff;
+  background: #fff;
+  color: #8016EB;
   padding: 0px 15px 0px 0;
   height: 45px;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 99px;
+  align-self: center;
 }
 
 .eth__address img{
   border-radius: 999px;
   height: 45px;
+}
+
+.auth__section{
+  display: flex;
+  justify-content: space-between;
+  flex: .3;
 }
 
 .eth__address p{
@@ -103,16 +110,16 @@
   .links {
     width: 60%;
   }
+
+  .auth__section{
+    flex: .4;
+  }
 }
 
 @media (max-width: 1024px) {
   .button{
     display: unset;
     flex: 1;
-  }
-
-  .links{
-    flex: 4;
   }
 }
 
@@ -122,7 +129,8 @@
   }
 
   .links {
-    width: 63%;
+    width: 73%;
+    flex: .48;
   }
 
   .line {
@@ -147,7 +155,7 @@
     display: flex;
   }
 
-  .eth__address{
+  .auth__section{
     display: none;
   }
 }
