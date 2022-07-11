@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import style from "../../styles/Header.module.css";
 import { logo, pointerDown } from "../../Images.js";
 import PrimaryButton from "../REUSABLES/PrimaryButton";
@@ -8,12 +8,19 @@ import Link from "next/link";
 import Identicon from "identicon.js";
 import { useRouter } from "next/router";
 import SecondaryButton from "../REUSABLES/SecondaryButton";
+import Drawer from './Drawer';
 
 const Header: React.FC = () => {
   const router = useRouter();
 
   const { connectWallet, currentUser, disconnectWallet } =
     useContext(BlockChainContext);
+
+  const [navOpen, setNavOpen] = useState<boolean>(false);
+
+  const handleNavOpen = () => {
+    setNavOpen(!navOpen);
+  };
 
   const formatUser: () => string = (): string => {
     if (currentUser) {
@@ -70,7 +77,7 @@ const Header: React.FC = () => {
           </Link>
         </ul>
         {currentUser ? (
-          <div className={style.auth__section} >
+          <div className={style.auth__section}>
             <div className={style.eth__address}>
               <img
                 src={`data:image/png;base64,${new Identicon(
@@ -88,7 +95,7 @@ const Header: React.FC = () => {
             <PrimaryButton onPress={connectWallet} info="Connect Wallet" />
           </div>
         )}
-        <div className={style.humbuger}>
+        <div onClick={handleNavOpen} className={style.humbuger}>
           <div />
           <div />
         </div>
