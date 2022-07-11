@@ -9,6 +9,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <BlockChainProvider>
       <>
+      <Drawer />
         <Header />
         <Component {...pageProps} />
         <SwitchNetworkModal />

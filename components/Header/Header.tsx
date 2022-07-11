@@ -42,8 +42,9 @@ const Header: React.FC = () => {
     }
   };
 
-  return navOpen? <Drawer /> : (
+  return (
     <section className={style.overall}>
+      
       <nav className={style.container}>
         <Link href="/">
           <img className={style.logo} src={logo} alt="logo" />

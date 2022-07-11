@@ -126,7 +126,8 @@
     .container h1{
         font-size: 48px;
         line-height: 60px;
-        width: 100%;
+        width: 70%;
+        text-align: center;
     }
 
     .container p{

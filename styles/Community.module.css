@@ -140,6 +140,10 @@
         width: 100%;
     }
 
+    .container h1{
+      width: 100%;
+    }
+
     .info__div img{
         width: 30px;
         height: 40x;

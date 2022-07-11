@@ -2,10 +2,104 @@
     background: #fff;
     position: fixed;
     width: 100%;
-    height: 100vh;
+    height: 100%;
     top: 0;
     left: 0;
     z-index: 9999;
     display: flex;
     flex-direction: column;
+    padding: 50px 35px;
+    transform: translateY(-100%);
+    transition: transform 0.6s ease-out;
+}
+
+
+
+.drawer .cancelIcon{
+    width: 35px;
+    height: 35px;
+    align-self: flex-end;
+    margin-bottom: 32px;
+    cursor: pointer;
+}
+
+.links{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    height: 60%;
+    justify-content: space-between;
+}
+
+.links li{
+    font-size: 48px;
+    color: #8016EB;
+    width: 100%;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.links li:hover{
+    letter-spacing: 3px;
+  transform: scale(1.08);
+}
+
+
+.rule{
+    width: 100%;
+    height: 1px;
+    background: #1A171B;
+    color: #1A171B;
+    margin-top: 19px;
+    overflow-y: hidden;
+}
+
+.links li:last-child{
+    margin-bottom: 0;
+    border-bottom: none;
+}
+
+.button{
+    padding: 0;
+    height: 15%;
+    align-self: center;
+    margin-top: 30px;
+}
+
+.logo{
+    width: 65%;
+    margin-top: 80px;
+    align-self: center;
+}
+
+.auth__section{
+    display: flex;
+    justify-content: space-between;
+    height: 15%;
+    align-items: center;
+    align-content: center;
+    
+}
+
+.auth__section img{
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    align-self: center;
+}
+
+.eth__address{
+    display: flex;
+    overflow-y: hidden;
+}
+
+.eth__address p{
+    font-size: 14px;
+    align-self: center;
+}
+
+.sec__button{
+    height: fit-content;
+    align-self: center;
 }
