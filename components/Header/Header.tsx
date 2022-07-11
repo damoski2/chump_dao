@@ -13,14 +13,8 @@ import Drawer from './Drawer';
 const Header: React.FC = () => {
   const router = useRouter();
 
-  const { connectWallet, currentUser, disconnectWallet } =
+  const { connectWallet, currentUser, disconnectWallet, navOpen, handleNavOpen } =
     useContext(BlockChainContext);
-
-  const [navOpen, setNavOpen] = useState<boolean>(false);
-
-  const handleNavOpen = () => {
-    setNavOpen(!navOpen);
-  };
 
   const formatUser: () => string = (): string => {
     if (currentUser) {
@@ -48,7 +42,7 @@ const Header: React.FC = () => {
     }
   };
 
-  return (
+  return navOpen? <Drawer /> : (
     <section className={style.overall}>
       <nav className={style.container}>
         <Link href="/">

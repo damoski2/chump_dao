@@ -62,6 +62,11 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
   const [allProposals, setAllProposal] = useState<reducedProposal[]>([]);
   const [networkSwitchModalOpen, setNetworkSwitchModalOpen] = useState<boolean>(false);
   const [networkChain, setNetworkChain] = useState<string>('0');
+  const [navOpen, setNavOpen] = useState<boolean>(false);
+
+  const handleNavOpen = () => {
+    setNavOpen(!navOpen);
+  };
 
   const getCryptoAssests = async (): Promise<void> => {
     const [data, error] = await fetchCryptoAssets();
@@ -351,6 +356,7 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
         totalMembers,
         totalAsset,
         networkSwitchModalOpen,
+        navOpen,
         connectWallet,
         buyTimeLine,
         createProposal,
@@ -359,7 +365,8 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
         fetchProposals,
         concludeProposal,
         switchNetwork,
-        disconnectWallet
+        disconnectWallet,
+        handleNavOpen
       }}
     >
       <Toaster
