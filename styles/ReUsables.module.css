@@ -18,3 +18,12 @@
     cursor: pointer;
     border: 1px solid rgba(128, 22, 235, .2);
 }
+
+.animation__container{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+}

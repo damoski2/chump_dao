@@ -7,3 +7,4 @@ export { default as Proposal } from './Proposal/Proposal.tsx'
 export { default as Footer } from './Footer/Footer.tsx';
 export { default as TimeLine } from './TimeLine/TimeLine.tsx';
 export { default as SwitchNetworkModal } from './Modals/SwitchNetworkModal.tsx';
+export { default as Loader } from './REUSABLES/Loader.tsx';

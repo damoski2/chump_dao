@@ -9,6 +9,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { ethers, BigNumber } from "ethers";
 import { DaiTokenAddress } from "../utils/constants";
 import Web3 from "web3";
+import { Loader } from '../components/imports'
 
 type ContextProp = {
   children: JSX.Element;
@@ -157,6 +158,8 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
           } as TransactionData);
           setTotalAsset(await convertEthToDollar(assestBalance.toNumber()));
           //console.log(assestBalance.toNumber());
+
+          setLoading(false);
         }
       }, 3000);
     } catch (error) {
@@ -169,11 +172,12 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
   const switchNetwork = async (chainId: string): Promise<string | void> => {
     try {
       if (!ethereum) return toast.error("Please install MetaMask");
+      setLoading(true);
       await ethereum.request({
         method: "wallet_switchEthereumChain",
         params: [{ chainId: chainId }],
       });
-      setLoading(true);
+      setLoading(false);
       changeNetwork();
       setNetworkChain(chainId);
     } catch (error) {
@@ -186,8 +190,8 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
     //console.log('pressed')
     let onRinkeby: Promise<boolean | void>;
     try {
-      setLoading(true);
       if (!ethereum) return toast.error("Please install MetaMask");
+      setLoading(true);
       const accounts = await ethereum.request({
         method: "eth_requestAccounts",
       });
@@ -224,8 +228,8 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
 
   const buyTimeLine = async (number: string): Promise<string | void> => {
     try {
-      setLoading(true);
       if (!ethereum) return toast.error("Please Install MetaMask");
+      setLoading(true);
       const transactionHash = await daiTokenContract.buytimeline({
         value: number,
         from: currentUser,
@@ -320,8 +324,8 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
           },
           []
         );
-        //console.log(_reducedProposal)
         setAllProposal(_reducedProposal);
+        setLoading(false);
       } catch (error) {
         setLoading(false);
         console.log(error);
@@ -405,7 +409,7 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
           },
         }}
       />
-      {children}
+      {loading? <Loader /> : children}
     </BlockChainContext.Provider>
   );
 };
