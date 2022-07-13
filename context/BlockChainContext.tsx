@@ -55,6 +55,7 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
   const [cryptoAssets, setCryptoAssests] = useState<ReturnData | null>();
   const [timeLineBalance, setTimeLineBalance] = useState<string>("0");
   const [loading, setLoading] = useState<boolean>(false);
+  const [transactionLoading, setTransactionLoading] = useState<boolean>(false);
   const [totalProposal, setTotalProposal] = useState<number | null>(null);
   const [totalVote, setTotalVote] = useState<number | null>(null);
   const [totalMembers, setTotalMembers] = useState<number | null>(null);
