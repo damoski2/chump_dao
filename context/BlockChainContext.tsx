@@ -9,7 +9,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { ethers, BigNumber } from "ethers";
 import { DaiTokenAddress } from "../utils/constants";
 import Web3 from "web3";
-import { Loader } from '../components/imports'
+import { Loader } from "../components/imports";
 
 type ContextProp = {
   children: JSX.Element;
@@ -44,26 +44,26 @@ if (typeof window !== "undefined") {
 
 const web3 = new Web3(ethereum);
 
+//Get Smart contract
+let daiTokenContract: any, daoContract: any, timeLineContract: any;
+
 export const BlockChainProvider: React.FC<ContextProp> = ({
   children,
 }): JSX.Element => {
-  //Get Smart contracts
-  const daiTokenContract = ethereum && getDaiTokenContract();
-  const daoContract = ethereum && getDaoContract();
-  const timeLineContract = ethereum && getTimeLineContract();
-
+  //States
   const [currentUser, setCurrentUser] = useState<string>();
   const [cryptoAssets, setCryptoAssests] = useState<ReturnData | null>();
   const [timeLineBalance, setTimeLineBalance] = useState<string>("0");
   const [loading, setLoading] = useState<boolean>(false);
-  const [transactionLoading, setTransactionLoading] = useState<boolean>(false);
+  const [transactionLoaded, setTransactionLoaded] = useState<boolean>(false);
   const [totalProposal, setTotalProposal] = useState<number | null>(null);
   const [totalVote, setTotalVote] = useState<number | null>(null);
   const [totalMembers, setTotalMembers] = useState<number | null>(null);
   const [totalAsset, setTotalAsset] = useState<string | null>(null);
   const [allProposals, setAllProposal] = useState<reducedProposal[]>([]);
-  const [networkSwitchModalOpen, setNetworkSwitchModalOpen] = useState<boolean>(false);
-  const [networkChain, setNetworkChain] = useState<string>('0');
+  const [networkSwitchModalOpen, setNetworkSwitchModalOpen] =
+    useState<boolean>(false);
+  const [networkChain, setNetworkChain] = useState<string>("0");
   const [navOpen, setNavOpen] = useState<boolean>(false);
 
   const handleNavOpen = () => {
@@ -113,10 +113,43 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
     setNetworkSwitchModalOpen(!networkSwitchModalOpen);
   };
 
+  const fetchDaoStatistics = async (): Promise<void | string> => {
+    let onRinkeby: boolean | void;
+    try {
+      await setTimeout(async () => {
+        //Set Network Correction
+        onRinkeby = await watchMetamaskNetworkRinkeby();
+        if (!onRinkeby) return;
+        //Set TimeLineBalance after user connection success
+        if (timeLineContract) {
+          //Set Total Members
+          let totalMembers = await timeLineContract.investorsIndex();
+          setTotalMembers(totalMembers.toNumber());
+        }
+        if (daoContract) {
+          let proposalTotal = await daoContract.totalProposal();
+          setTotalProposal(proposalTotal.toNumber());
+
+          let voteTotal = await daoContract.totalVote();
+          setTotalVote(voteTotal.toNumber());
+
+          //Calculate and set total Assets relative to Pool;
+          let assestBalance = await daoContract.fetchTotalAsset();
+          setTotalAsset(await convertEthToDollar(assestBalance.toNumber()));
+          //console.log(assestBalance.toNumber());
+          fetchProposals();
+        }
+      }, 3000);
+    } catch (error: any) {
+      console.log(error.reason);
+      toast.error(error.reason);
+    }
+  };
+
   const checkIfWalletConnected = async (): Promise<void | string> => {
     let onRinkeby: boolean | void;
     try {
-      setLoading(true);
+      //setLoading(true);
       if (!ethereum) return alert("Please Install Metamask");
 
       const accounts = await ethereum.request({
@@ -136,31 +169,8 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
             timeLineBalance.toString()
           );
           setTimeLineBalance(timeLineBalance);
-
-          //Set Total Members
-          let totalMembers = await timeLineContract.investorsIndex();
-          setTotalMembers(totalMembers.toNumber());
         }
-        if (daoContract) {
-          let proposalTotal = await daoContract.totalProposal({
-            from: accounts[0],
-          } as TransactionData);
-          setTotalProposal(proposalTotal.toNumber());
-
-          let voteTotal = await daoContract.totalVote({
-            from: accounts[0],
-          } as TransactionData);
-          setTotalVote(voteTotal.toNumber());
-
-          //Calculate and set total Assets relative to Pool;
-          let assestBalance = await daoContract.fetchTotalAsset({
-            from: accounts[0],
-          } as TransactionData);
-          setTotalAsset(await convertEthToDollar(assestBalance.toNumber()));
-          //console.log(assestBalance.toNumber());
-
-          setLoading(false);
-        }
+        //setLoading(false);
       }, 3000);
     } catch (error) {
       setLoading(false);
@@ -198,10 +208,6 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
       setCurrentUser(accounts[0]);
       setLoading(false);
       localStorage.setItem("chumpDaoConnected", accounts[0]);
-      /* await setTimeout(() => {
-        onRinkeby = watchMetamaskNetworkRinkeby();
-        if (!onRinkeby) return toast.error("Please Switch to Rinkeby Network");
-      }, 3000); */
     } catch (error) {
       setLoading(false);
       console.log(error);
@@ -237,6 +243,7 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
       await transactionHash.wait();
       setLoading(false);
       toast.success("Transaction Successful!");
+      await fetchDaoStatistics();
     } catch (error) {
       setLoading(false);
       console.log(error);
@@ -251,8 +258,8 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
         from: currentUser,
       } as TransactionData);
       await transactionHash.wait();
-      setLoading(false);
       toast.success("Proposal Created Successfully!");
+      await fetchProposals();
     } catch (error: any) {
       setLoading(false);
       console.log(error.reason);
@@ -271,6 +278,7 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
       } as TransactionData);
       await transactionHash.wait();
       setLoading(false);
+      await fetchProposals();
       toast.success("Vote Successful!");
     } catch (error: any) {
       setLoading(false);
@@ -286,7 +294,7 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
         from: currentUser,
       } as TransactionData);
       await transactionHash.wait();
-      setLoading(false);
+      await fetchProposals();
       toast.success("Proposal Concluded Successfully!");
     } catch (error: any) {
       setLoading(false);
@@ -297,14 +305,13 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
 
   const fetchProposals = async (): Promise<string | void> => {
     let onRinkeby: Promise<boolean | void>;
-    await setTimeout(async() => {
+    await setTimeout(async () => {
+      if (!ethereum) return toast.error("Please Install MetaMask");
       onRinkeby = watchMetamaskNetworkRinkeby();
-      if (!onRinkeby) return changeNetwork();
+      if (!onRinkeby) return;
       try {
-        setLoading(true);
-        const proposals = await daoContract.fetchAllProposals({
-          from: currentUser,
-        } as TransactionData);
+        //console.log(daoContract)
+        const proposals = await daoContract.fetchAllProposals();
         //console.log(proposals)
         let _reducedProposal = proposals.reduce(
           (acc: Array<reducedProposal>, curr: any) => {
@@ -341,10 +348,29 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
     if (localStorage.getItem("chumpDaoConnected")) {
       checkIfWalletConnected();
     }
-    fetchProposals();
+
+    ethereum &&
+      getDaiTokenContract()
+        .then((contract) => {
+          setLoading(true);
+          daiTokenContract = contract;
+        })
+        .then(() =>
+          getDaoContract()
+            .then((contract) => {
+              daoContract = contract;
+            })
+            .then(() =>
+              getTimeLineContract()
+                .then((contract) => {
+                  timeLineContract = contract;
+                })
+                .then(() => fetchDaoStatistics())
+            )
+        );
   }, [networkChain, currentUser]);
 
-/*   useEffect(() => {
+  /*   useEffect(() => {
     fetchProposals();
   }, [currentUser]); */
 
@@ -371,7 +397,7 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
         concludeProposal,
         switchNetwork,
         disconnectWallet,
-        handleNavOpen
+        handleNavOpen,
       }}
     >
       <Toaster
@@ -381,10 +407,12 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
           className: "",
           duration: 5000,
           style: {
+            duration: 3000,
             background: "#363636",
             color: "#fff",
           },
           success: {
+            duration: 3000,
             style: {
               background: "#102f10",
               width: "700px",
@@ -397,6 +425,7 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
           },
 
           error: {
+            duration: 3000,
             style: {
               background: "#f10021",
               width: "700px",
@@ -409,7 +438,9 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
           },
         }}
       />
-      {loading? <Loader /> : children}
+      {children}
     </BlockChainContext.Provider>
   );
 };
+
+//Remove Loading UI rendering logic from context as its causing issues with fetching infinitly resulting from state changes

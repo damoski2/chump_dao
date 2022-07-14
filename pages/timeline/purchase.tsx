@@ -5,10 +5,11 @@ import { arrowLeftIcon, sendIcon, timeBalanceIcon, arrowUp, blockchainIcom } fro
 import Link from "next/link";
 import { BlockChainContext } from "../../context/BlockChainContext";
 import { useForm } from "../../hooks/form";
+import { Loader } from '../../components/imports'
 
 const Purchase: React.FC = (): JSX.Element => {
 
-  const { timeLineBalance, buyTimeLine } = useContext(BlockChainContext);
+  const { timeLineBalance, buyTimeLine, loading } = useContext(BlockChainContext);
 
   const { handleChange, submit, values } = useForm(buyTimeLine, 'buyTimeLine', {
     amount: ""
@@ -16,6 +17,10 @@ const Purchase: React.FC = (): JSX.Element => {
 
   const timeLineToEth = (): number => {
     return timeLineBalance / 45;
+  }
+
+  if(loading){
+    return <Loader />
   }
 
   return (
@@ -32,17 +37,21 @@ const Purchase: React.FC = (): JSX.Element => {
             <p>{timeLineToEth()} ETH</p>
           </div>
         </div>
+
+        <div className={style.input__area} >
+        <h3>Enter Amount in Ethers: </h3>
         <textarea value={values.amount} name="amount" onChange={handleChange()} />
+        </div>
       </div>
       <div className={style.button__link}>
         <button>
           <img src={sendIcon} alt="sendIcon" />
-          <h1>Buy</h1>
+          <p>Buy</p>
         </button>
         <Link href="/">
           <button>
             <img src={arrowLeftIcon} alt="sendIcon" />
-            <h1>Home</h1>
+            <p>Home</p>
           </button>
         </Link>
       </div>

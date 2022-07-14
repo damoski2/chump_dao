@@ -13,7 +13,7 @@ import Drawer from './Drawer';
 const Header: React.FC = () => {
   const router = useRouter();
 
-  const { connectWallet, currentUser, disconnectWallet, navOpen, handleNavOpen } =
+  const { connectWallet, currentUser, disconnectWallet, navOpen, handleNavOpen, loading } =
     useContext(BlockChainContext);
 
   const formatUser: () => string = (): string => {
@@ -43,7 +43,7 @@ const Header: React.FC = () => {
   };
 
   return (
-    <section className={style.overall}>
+    <section className={style.overall} style={{ display: loading&&'none' }} >
       
       <nav className={style.container}>
         <Link href="/">

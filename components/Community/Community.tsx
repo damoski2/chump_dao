@@ -67,7 +67,7 @@ const Community: React.FC = () => {
 
   //LifeCycle
   useEffect(() => {
-    console.log(ref.current);
+    //console.log(ref.current);
     TweenLite.set(ref.current, {
       x: randomX(-1),
       y: randomX(1),

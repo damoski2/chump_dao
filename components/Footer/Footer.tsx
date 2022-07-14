@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import PrimaryButton from "../REUSABLES/PrimaryButton";
 import style from "../../styles/Footer.module.css";
 import TimeLine from "../TimeLine/TimeLine";
+import { BlockChainContext } from '../../context/BlockChainContext'
+
 
 const Footer = () => {
+
+  const { loading } = useContext(BlockChainContext)
+
   return (
-    <div className={style.container}>
+    <div style={{ display: loading&&'none' }} className={style.container}>
       <div className={style.footer__section}>
         <div className={style.footer__links}>
           <div className={style.child__div}>

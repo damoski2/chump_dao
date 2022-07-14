@@ -13,26 +13,30 @@ if (typeof window !== 'undefined'){
 const web3 = new Web3(ethereum);
 
 
-export const getDaiTokenContract = (): ethers.Contract=>{
+export const getDaiTokenContract = async(): Promise<ethers.Contract>=>{
     const provider = new ethers.providers.Web3Provider(web3.currentProvider as any);
-    const signer = provider.getSigner();
+    let _signed = await provider.listAccounts();
+    const signer = _signed[0]? await provider.getSigner() : await provider.getSigner(process.env.daoCreatorAddress);
     const daiTokenContract = new ethers.Contract(DaiTokenAddress, daiTokenABI, signer);
 
     return daiTokenContract;
 }
 
-export const getDaoContract = ():ethers.Contract=>{
+export const getDaoContract = async():Promise<ethers.Contract>=>{
     const provider = new ethers.providers.Web3Provider(web3.currentProvider as any);
-    const signer = provider.getSigner();
+    let _signed = await provider.listAccounts();
+    const signer = _signed[0]? await provider.getSigner() : await provider.getSigner(process.env.daoCreatorAddress);
     const daoContract = new ethers.Contract(DaoAddress, daoABI, signer);
 
     return daoContract;
 }
 
 
-export const getTimeLineContract = ():ethers.Contract=>{
+export const getTimeLineContract = async():Promise<ethers.Contract>=>{
     const provider = new ethers.providers.Web3Provider(web3.currentProvider as any);
-    const signer = provider.getSigner();
+    let _signed = await provider.listAccounts();
+    console.log(_signed)
+    const signer = _signed[0]? await provider.getSigner() : await provider.getSigner(process.env.daoCreatorAddress);
     const timeLineContract = new ethers.Contract(TimeLineAddress, timeLineABI, signer);
 
     return timeLineContract;

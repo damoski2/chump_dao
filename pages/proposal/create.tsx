@@ -1,8 +1,16 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { CreateProposal } from '../../components/imports'
+import { BlockChainContext } from '../../context/BlockChainContext'
+import { Loader } from '../../components/imports'
 
+const Create: React.FC = (): JSX.Element => {
 
-const create: React.FC = () => {
+    const { loading } = useContext(BlockChainContext)
+
+    if(loading){
+        return <Loader />
+    }
+
     return (
         <div>
             <CreateProposal />
@@ -10,4 +18,4 @@ const create: React.FC = () => {
     )
 }
 
-export default create
+export default Create

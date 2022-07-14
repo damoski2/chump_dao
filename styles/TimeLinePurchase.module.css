@@ -31,12 +31,25 @@
   justify-content: space-between;
 }
 
+.input__area{
+    margin-top: 50px;
+}
+
+.input__area h3{
+    color: #1a171b;
+    font-size: 18px;
+    font-weight: 500;
+    margin: 0;
+    margin-bottom: 20px;
+}
+
 .purchase__block textarea {
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 7px;
   width: 685px;
   height: 114px;
-  margin-top: 30px;
+  font-size: 20px;
+  padding: 10px;
 }
 
 .metrics{
@@ -82,15 +95,21 @@
     box-shadow: -1.93862px 0px 22.2941px 31.9872px rgba(0, 0, 0, 0.02);
     color: #fff;
     border-radius: 18px;
-    padding: 28px 0;
+    padding: 8px 0;
     cursor: pointer;
 }
 
-.button__link h1{
+.button__link img{
+    width: 48px;
+    height: 48px;
+}
+
+.button__link p{
     margin: 0;
     align-self: center;
     color: #fff;
     margin-left: 8px;
+    font-size: 32px;
 }
 
 .button__link img{
@@ -135,6 +154,10 @@
     .button__link h1{
         font-size: 32px;
         margin: 0;
+    }
+
+    .container{
+        padding: 60px 15px;
     }
 }
 

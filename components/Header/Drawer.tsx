@@ -24,6 +24,7 @@ const Drawer: React.FC = () => {
     disconnectWallet,
     handleNavOpen,
     navOpen,
+    loading
   } = useContext(BlockChainContext);
 
   //Menu toggle gsap
@@ -31,7 +32,7 @@ const Drawer: React.FC = () => {
 
 
   const handleToggle = ()=>{
-    console.log(navOpen)
+    //console.log(navOpen)
     if(navOpen){
         tl.to(drawer.current,{
             duration: 1,
@@ -101,7 +102,7 @@ const Drawer: React.FC = () => {
   };
 
   return (
-    <div ref={drawer} className={style.drawer}>
+    <div style={{ display: loading&&'none' }} ref={drawer} className={style.drawer}>
       <img ref={menu} src={cancelIcon} onClick={handleNavOpen} alt="cancelIcon" className={cx(style.cancelIcon,'gsap_child')} />
       <ul className={style.links}>
         <Link href="/timeline/purchase">
