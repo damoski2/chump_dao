@@ -62,6 +62,10 @@
     flex: .12;
 }
 
+.actual__list .status{
+    text-align: center;
+}
+
 @media(max-width:768px){
 
     .container{

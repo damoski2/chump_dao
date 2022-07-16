@@ -32,7 +32,7 @@ export type reducedProposal = {
   proposer: string;
 };
 
-export const BlockChainContext: React.Context<T> = createContext<null>(null);
+export const BlockChainContext: React.Context<any> = createContext<null>(null);
 
 let ethereum: any;
 let solana;

@@ -11,7 +11,6 @@ type StyleProp = {
     padding: string,
     borderRadius: string,
     width: string,
-    textAlign: string,
     cursor: string,
 }
 
@@ -28,7 +27,6 @@ const ListProposal: React.FC = () => {
                 padding: '10px',
                 borderRadius: '32px',
                 width: 'fit-content',
-                textAlign: 'center',
                 cursor: 'pointer'
             }
             break;
@@ -40,7 +38,6 @@ const ListProposal: React.FC = () => {
                 padding: '10px',
                 borderRadius: '32px',
                 width: 'fit-content',
-                textAlign: 'center',
                 cursor: 'pointer'
             }
             break;
@@ -52,7 +49,6 @@ const ListProposal: React.FC = () => {
                 padding: '10px',
                 borderRadius: '32px',
                 width: 'fit-content',
-                textAlign: 'center',
                 cursor: 'pointer'
             }
 
@@ -63,7 +59,6 @@ const ListProposal: React.FC = () => {
                 padding: '10px',
                 borderRadius: '32px',
                 width: 'fit-content',
-                textAlign: 'center',
                 cursor: 'pointer'
             }
             break;
