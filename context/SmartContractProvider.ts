@@ -35,7 +35,6 @@ export const getDaoContract = async():Promise<ethers.Contract>=>{
 export const getTimeLineContract = async():Promise<ethers.Contract>=>{
     const provider = new ethers.providers.Web3Provider(web3.currentProvider as any);
     let _signed = await provider.listAccounts();
-    console.log(_signed)
     const signer = _signed[0]? await provider.getSigner() : await provider.getSigner(process.env.daoCreatorAddress);
     const timeLineContract = new ethers.Contract(TimeLineAddress, timeLineABI, signer);
 

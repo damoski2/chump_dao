@@ -61,6 +61,7 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
   const [totalMembers, setTotalMembers] = useState<number | null>(null);
   const [totalAsset, setTotalAsset] = useState<string | null>(null);
   const [allProposals, setAllProposal] = useState<reducedProposal[]>([]);
+  const [tokenAdded, setTokenAdded] = useState<boolean>(false);
   const [networkSwitchModalOpen, setNetworkSwitchModalOpen] =
     useState<boolean>(false);
   const [networkChain, setNetworkChain] = useState<string>("0");
@@ -156,6 +157,7 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
         method: "eth_requestAccounts",
       });
       accounts.length && setCurrentUser(accounts[0]);
+      localStorage.setItem("chumpDaoConnected", accounts[0]);
 
       await setTimeout(async () => {
         //Set Network Correction
@@ -164,10 +166,11 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
 
         //Set TimeLineBalance after user connection success
         if (timeLineContract) {
-          let timeLineBalance = await timeLineContract.balanceOf(accounts[0]);
-          timeLineBalance = ethers.utils.formatEther(
+            let timeLineBalance = await timeLineContract.balanceOf(accounts[0]);
+            timeLineBalance = ethers.utils.formatEther(
             timeLineBalance.toString()
           );
+          console.log(Number(timeLineBalance));
           setTimeLineBalance(timeLineBalance);
         }
         //setLoading(false);
@@ -178,6 +181,35 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
       toast.error("Connection Error!");
     }
   };
+
+
+  const addTokenToMetamask = async (): Promise<void | string> => {
+    try{
+      if(Number(timeLineBalance) <= 0){
+        const wasAdded = await ethereum.request({
+          method: "wallet_watchAsset",
+          params: {
+            type: 'ERC20',
+            options: {
+              address: process.env.timelineAddress,
+              symbol: process.env.timeLineSymbol,
+              decimals: process.env.tokenDecimals,
+              image: process.env.tokenImage
+            }
+          }
+        })
+        if(wasAdded){
+          toast.success('Token Added to Metamask');
+        }else{
+          toast.error('Token Already Added to Metamask');
+        }
+      }
+
+    }catch(error: any){
+      console.log(error.reason);
+      toast.error(error.reason);
+    }
+  }
 
   const switchNetwork = async (chainId: string): Promise<string | void> => {
     try {
@@ -243,6 +275,7 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
       await transactionHash.wait();
       setLoading(false);
       toast.success("Transaction Successful!");
+      await addTokenToMetamask();
       await fetchDaoStatistics();
     } catch (error) {
       setLoading(false);
@@ -343,6 +376,12 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
   useEffect(() => {
     getCryptoAssests();
   }, []);
+
+/*   useEffect(()=>{
+    if(timeLineBalance && Number(timeLineBalance) > 0){
+      addTokenToMetamask()
+    }
+  },[timeLineBalance]) */
 
   useEffect(() => {
     if (localStorage.getItem("chumpDaoConnected")) {
