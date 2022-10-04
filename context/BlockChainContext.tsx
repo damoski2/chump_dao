@@ -183,18 +183,27 @@ export const BlockChainProvider: React.FC<ContextProp> = ({
   };
 
 
+  /**
+   * @name addTokenToMetamask
+   * @description function add token to metamask one's current logged in user makes any form of purchase transaction
+   * @param {Null}
+   * @returns {Promise<void | string>}
+  */
+
   const addTokenToMetamask = async (): Promise<void | string> => {
     try{
+      // timeLineBalance checks the available balance of the token in the user's wallet,
+      // if there isn't it adds the token to the user's wallet for first time
       if(Number(timeLineBalance) <= 0){
         const wasAdded = await ethereum.request({
           method: "wallet_watchAsset",
           params: {
             type: 'ERC20',
             options: {
-              address: process.env.timelineAddress,
-              symbol: process.env.timeLineSymbol,
-              decimals: process.env.tokenDecimals,
-              image: process.env.tokenImage
+              address: process.env.timelineAddress,  //The Token public address
+              symbol: process.env.timeLineSymbol,    //Symbol to represent the token
+              decimals: process.env.tokenDecimals,   //The number of decimals in the token
+              image: process.env.tokenImage          //A string Url of the token logo
             }
           }
         })
